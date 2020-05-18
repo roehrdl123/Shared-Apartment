@@ -32,9 +32,9 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
     @Override
     protected void onBindViewHolder(@NonNull ShoppingViewHolder holder, int position, @NonNull final Artikel model)
     {
-        holder.titleTV.setText(model.getTitel());
-        holder.amountTV.setText("" + model.getAnzahl());
-        holder.doneIV.setVisibility(model.isErledigt() ? View.VISIBLE : View.INVISIBLE);
+        holder.titleTV.setText(model.getTitle());
+        holder.amountTV.setText("" + model.getQuantity());
+        holder.doneIV.setVisibility(model.isDone() ? View.VISIBLE : View.INVISIBLE);
 
         holder.infoIV.setOnClickListener(new View.OnClickListener()
         {

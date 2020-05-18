@@ -160,7 +160,7 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
             TextView tvAmountTemplate = dialogTemplate.findViewById(R.id.tvAnzahlTemplate);
             if (tvAmountTemplate.getText().length() != 0 && tvAmountTemplate.getText() != null)
             {
-                a.setAnzahl(Integer.parseInt(tvAmountTemplate.getText().toString()));
+                a.setQuantity(Integer.parseInt(tvAmountTemplate.getText().toString()));
             }
             addToDatabase(a);
         }

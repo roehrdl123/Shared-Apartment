@@ -34,7 +34,7 @@ public class CustomShoppingListActivity extends AppCompatActivity
             if (binding.txtBezeichnung.getText() != null)
             {
                 String bez = binding.txtBezeichnung.getText().toString();
-                a.setBezeichnung(bez);
+                a.setContent(bez);
             }
             setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
 
@@ -54,7 +54,7 @@ public class CustomShoppingListActivity extends AppCompatActivity
             if (binding.txtBezeichnung.getText() != null)
             {
                 String bez = binding.txtBezeichnung.getText().toString();
-                a.setBezeichnung(bez);
+                a.setContent(bez);
             }
             setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
 

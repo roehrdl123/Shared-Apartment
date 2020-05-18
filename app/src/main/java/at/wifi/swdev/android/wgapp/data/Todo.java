@@ -1,11 +1,10 @@
 package at.wifi.swdev.android.wgapp.data;
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
 
 public class Todo implements Serializable
 {
+    private String id;
     private String title;
     private String content;
     private boolean erledigt = false;
@@ -50,10 +49,13 @@ public class Todo implements Serializable
         this.erledigt = erledigt;
     }
 
-    @NonNull
-    @Override
-    public String toString()
+    public String getId()
     {
-        return title;
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
     }
 }

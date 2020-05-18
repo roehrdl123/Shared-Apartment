@@ -1,21 +1,20 @@
 package at.wifi.swdev.android.wgapp.data;
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
 
 public class Artikel implements Serializable
 {
     private String id;
-    private int anzahl;
-    private String titel;
-    private String bezeichnung;
-    private boolean erledigt = false;
+    private int quantity;
+    private String title;
+    private String content;
+    private boolean done = false;
 
-    public Artikel(int anzahl, String titel)
+
+    public Artikel(int quantity, String title)
     {
-        this.anzahl = anzahl;
-        this.titel = titel;
+        this.quantity = quantity;
+        this.title = title;
     }
 
     public Artikel()
@@ -32,51 +31,43 @@ public class Artikel implements Serializable
         this.id = id;
     }
 
-    public int getAnzahl()
+    public int getQuantity()
     {
-        return anzahl;
+        return quantity;
     }
 
-    public void setAnzahl(int anzahl)
+    public void setQuantity(int quantity)
     {
-        this.anzahl = anzahl;
+        this.quantity = quantity;
     }
 
-    public String getTitel()
+    public String getTitle()
     {
-        return titel;
+        return title;
     }
 
-    public void setTitel(String titel)
+    public void setTitle(String title)
     {
-        this.titel = titel;
+        this.title = title;
     }
 
-    public String getBezeichnung()
+    public String getContent()
     {
-        return bezeichnung;
+        return content;
     }
 
-    public void setBezeichnung(String bezeichnung)
+    public void setContent(String content)
     {
-        this.bezeichnung = bezeichnung;
+        this.content = content;
     }
 
-    public boolean isErledigt()
+    public boolean isDone()
     {
-        return erledigt;
+        return done;
     }
 
-    public void setErledigt(boolean erledigt)
+    public void setDone(boolean done)
     {
-        this.erledigt = erledigt;
-    }
-
-    @NonNull
-    @Override
-    public String toString()
-    {
-        //TODO: toString ändern
-        return titel;
+        this.done = done;
     }
 }

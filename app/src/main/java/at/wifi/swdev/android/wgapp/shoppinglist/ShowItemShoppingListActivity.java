@@ -34,10 +34,10 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
 
         artikel = (Artikel) getIntent().getSerializableExtra(SERIALIZABLE_EXTRA);
 
-        binding.swDone.setChecked(artikel.isErledigt());
-        binding.etAmount.setText(artikel.getAnzahl() + "");
-        binding.etTitle.setText(artikel.getTitel());
-        binding.etContent.setText(artikel.getBezeichnung());
+        binding.swDone.setChecked(artikel.isDone());
+        binding.etAmount.setText(artikel.getQuantity() + "");
+        binding.etTitle.setText(artikel.getTitle());
+        binding.etContent.setText(artikel.getContent());
 
         int requestCode = getIntent().getIntExtra(REQUEST_CODE_EXTRA, 0);
         if (requestCode == REQUEST_CODE_EDIT)
@@ -96,10 +96,10 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
         {
             if (binding.etAmount.getText() != null && binding.etTitle.getText() != null && binding.etContent.getText() != null)
             {
-                artikel.setAnzahl(Integer.parseInt(binding.etAmount.getText().toString()));
-                artikel.setTitel(binding.etTitle.getText().toString());
-                artikel.setBezeichnung(binding.etContent.getText().toString());
-                artikel.setErledigt(binding.swDone.isChecked());
+                artikel.setQuantity(Integer.parseInt(binding.etAmount.getText().toString()));
+                artikel.setTitle(binding.etTitle.getText().toString());
+                artikel.setContent(binding.etContent.getText().toString());
+                artikel.setDone(binding.swDone.isChecked());
 
                 FirebaseDatabase.getInstance().getReference("shoppinglist").child(artikel.getId()).setValue(artikel);
                 Toast.makeText(this, "Der Artikel wurde geändert!", Toast.LENGTH_SHORT).show();
