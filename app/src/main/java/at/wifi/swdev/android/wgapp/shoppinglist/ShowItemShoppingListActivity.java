@@ -89,7 +89,7 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
         if (!isEditing)
         {
             isEditing = true;
-            Toast.makeText(this, "Der Artikel kann nun geändert werden!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.changeAllowed, Toast.LENGTH_SHORT).show();
             showEdit();
         }
         else
