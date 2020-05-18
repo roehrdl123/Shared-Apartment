@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".shoppinglist.QrCodeScannerActivity">
+
+    <SurfaceView
+        android:id="@+id/svCameraView"
+        android:onClick="onScanAgain"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:maxLines="3"
+        android:minLines="1"
+        android:text="@string/info_qr_scanner"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/svCameraView"
+        app:layout_constraintEnd_toEndOf="@+id/svCameraView"
+        app:layout_constraintStart_toStartOf="@+id/svCameraView" />
+
+    <TextView
+        android:id="@+id/tvAgain"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="#000000"
+        android:text="@string/info_qr_scanner_new_code"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/svCameraView"
+        app:layout_constraintEnd_toEndOf="@+id/svCameraView"
+        app:layout_constraintStart_toStartOf="@+id/svCameraView"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tvNoPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/info_qr_scanner_no_permission"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/svCameraView"
+        app:layout_constraintEnd_toEndOf="@+id/svCameraView"
+        app:layout_constraintStart_toStartOf="@+id/svCameraView"
+        app:layout_constraintTop_toTopOf="@+id/svCameraView"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/svCameraView"
+        app:layout_constraintStart_toStartOf="@+id/svCameraView"
+        app:layout_constraintTop_toBottomOf="@+id/svCameraView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

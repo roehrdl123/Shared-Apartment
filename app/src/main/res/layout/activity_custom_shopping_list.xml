@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".shoppinglist.CustomShoppingListActivity">
+
+    <TextView
+        android:id="@+id/tvAnzahl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_anzahl"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/tvAnzahlTemplate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTitel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_Titel"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/txtTitel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAnzahlTemplate" />
+
+    <TextView
+        android:id="@+id/tvBez"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_bezeichnung"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/txtBezeichnung"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitel" />
+
+    <Button
+        android:id="@+id/btnVorlage"
+        android:onClick="onSaveAndAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_template"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnHinzufuegen"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtBezeichnung" />
+
+    <Button
+        android:id="@+id/btnHinzufuegen"
+        android:onClick="onAddToShoppingList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="@string/string_add"
+        app:layout_constraintBottom_toBottomOf="@+id/btnVorlage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnVorlage"
+        app:layout_constraintTop_toTopOf="@+id/btnVorlage" />
+
+    <EditText
+        android:id="@+id/txtTitel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/tv_Titel"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/tvBez"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitel"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/txtBezeichnung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/tv_bezeichnung"
+        android:inputType="textMultiLine|textPersonName"
+        android:lines="3"
+        android:minLines="3"
+        app:layout_constraintBottom_toTopOf="@+id/btnVorlage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBez"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/tvAnzahlTemplate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/tv_anzahl"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/tvTitel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAnzahl"
+        android:autofillHints="" />
+</androidx.constraintlayout.widget.ConstraintLayout>

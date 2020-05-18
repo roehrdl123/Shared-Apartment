@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "899268793661",
+    "firebase_url": "https://shared-apartment.firebaseio.com",
+    "project_id": "shared-apartment",
+    "storage_bucket": "shared-apartment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899268793661:android:86f02a02d100be8d48a154",
+        "android_client_info": {
+          "package_name": "at.wifi.swdev.android.wgapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899268793661-hl2te6dc2henp8b8tf622q87j2p1he18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfbZEpLjkSlU1kL6t2quHAM_msaJiGLNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899268793661-hl2te6dc2henp8b8tf622q87j2p1he18.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

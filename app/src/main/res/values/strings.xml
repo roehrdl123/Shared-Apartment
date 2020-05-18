@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">WGApp</string>
+    <string name="vorlage">Vorlage</string>
+    <string name="custom">Custom</string>
+    <string name="qr_code">QR-Code</string>
+    <string name="info_qr_scanner">Scanne einen QR Code um die Artikel hinzuzufügen</string>
+    <string name="info_qr_scanner_new_code">Tippe in die Kamera um einen neuen Code zu scannen</string>
+    <string name="info_qr_scanner_no_permission">Anzeigen ohne Kameraberechtigung nicht möglich</string>
+    <string name="tv_anzahl">Anzahl</string>
+    <string name="tv_Titel">Titel</string>
+    <string name="tv_bezeichnung">Bezeichnung</string>
+    <string name="string_template">Als Vorlage speichern</string>
+    <string name="string_add">Hinzufügen</string>
+    <string name="str_back">Schließen</string>
+    <string name="addTodo">Hinzufügen eines Todos</string>
+    <string name="content">Beschreibung</string>
+    <string name="delete">Löschen</string>
+    <string name="edit">Ändern</string>
+    <string name="info">Info</string>
+</resources>
