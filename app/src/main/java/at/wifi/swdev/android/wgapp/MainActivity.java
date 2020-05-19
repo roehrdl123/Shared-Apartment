@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -118,4 +117,11 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+    /*
+    TODO: 1. Kalender
+    TODO: 2. QR-Liste von FirebaseStorage & FirebaseDatabase mergen
+    TODO: 3. TODO-List Firebase tauglich machen
+    TODO: 4. Fragments (Kalender, TodoList und ShoopingList Mains) das andere bleiben Activities
+    TODO: 5. Design
+    */
 }
