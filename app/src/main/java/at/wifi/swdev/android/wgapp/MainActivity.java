@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Toast.makeText(this, "TEST", Toast.LENGTH_SHORT).show();
-
         FirebaseApp.initializeApp(this);
         //Ist User schon angemeldet?
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

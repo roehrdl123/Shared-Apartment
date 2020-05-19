@@ -156,7 +156,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
                         {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren())
                             {
-                                long qrId = (long) snapshot.child("id").getValue();
+                                long qrId = (long) snapshot.child("qrId").getValue();
                                 String qrIdString = ""+qrId;
                                 if (qrIdString.equals(barcode.displayValue))
                                 {

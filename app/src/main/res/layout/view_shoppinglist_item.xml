@@ -83,7 +83,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ivInfoToDo"
+            android:id="@+id/ivInfoQr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="4dp"
@@ -91,7 +91,7 @@
             app:srcCompat="@drawable/ic_info_blue_24dp" />
 
         <ImageView
-            android:id="@+id/ivEditToDo"
+            android:id="@+id/ivEditQr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
@@ -100,7 +100,7 @@
             app:srcCompat="@drawable/ic_mode_edit_black_24dp" />
 
         <ImageView
-            android:id="@+id/ivDeleteToDo"
+            android:id="@+id/ivDeleteQr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"

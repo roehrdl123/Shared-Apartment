@@ -18,4 +18,9 @@
     <string name="edit">Ändern</string>
     <string name="info">Info</string>
     <string name="changeAllowed">Der Artikel kann nun geändert werden!</string>
+    <string name="qrmenu">QrMenu</string>
+    <string name="fertig">Fertig</string>
+    <string name="id">ID: </string>
+    <string name="drucken">Drucken</string>
+    <string name="qrcodeActionBar">QrCode Zuweisungstabelle</string>
 </resources>

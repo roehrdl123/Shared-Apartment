@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -33,6 +35,8 @@ import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.databinding.ActivityShoopingListBinding;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
+import at.wifi.swdev.android.wgapp.qr.QrCodeAddTableActivity;
+import at.wifi.swdev.android.wgapp.qr.QrCodeListActivity;
 
 public class ShoppingListActivity extends AppCompatActivity implements onListItemClickListener<Artikel>
 {
@@ -54,9 +58,9 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
 
         recyclerView = binding.rvShoppingList;
 
-        Query chatsQuery = FirebaseDatabase.getInstance().getReference("shoppinglist");
+        Query shoppinglistQuery = FirebaseDatabase.getInstance().getReference("shoppinglist");
 
-        FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(this).setQuery(chatsQuery, Artikel.class).build();
+        FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(this).setQuery(shoppinglistQuery, Artikel.class).build();
 
         adapter = new ShoppingListAdapter(options);
         adapter.setOnClickListener(this);
@@ -170,8 +174,6 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
-        //TODO: Elemente hinzufügen
-
         if (RESULT_OK == resultCode && data != null)
         {
             switch (requestCode)
@@ -221,6 +223,32 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
         Intent intent = new Intent(this, ShowItemShoppingListActivity.class);
         intent.putExtra(ShowItemShoppingListActivity.REQUEST_CODE_EXTRA, requestcode);
         intent.putExtra(ShowItemShoppingListActivity.SERIALIZABLE_EXTRA, model);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.qr_codes, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menuQrTable:
+                startQrMenu();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void startQrMenu()
+    {
+        Intent intent = new Intent(this, QrCodeListActivity.class);
         startActivity(intent);
     }
 }

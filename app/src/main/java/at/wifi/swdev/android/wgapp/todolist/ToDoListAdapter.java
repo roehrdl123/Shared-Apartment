@@ -49,9 +49,9 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
         {
             super(itemView);
             doneTodoIV = itemView.findViewById(R.id.ivDoneToDo);
-            editTodoTV = itemView.findViewById(R.id.ivEditToDo);
-            infoTodoTV = itemView.findViewById(R.id.ivInfoToDo);
-            deleteTodoTV = itemView.findViewById(R.id.ivDeleteToDo);
+            editTodoTV = itemView.findViewById(R.id.ivEditQr);
+            infoTodoTV = itemView.findViewById(R.id.ivInfoQr);
+            deleteTodoTV = itemView.findViewById(R.id.ivDeleteQr);
             titleTodoTV = itemView.findViewById(R.id.tvTitleToDo);
             dividerTodo = itemView.findViewById(R.id.dividerToDo);
         }
