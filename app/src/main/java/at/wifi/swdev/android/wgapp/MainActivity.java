@@ -119,9 +119,7 @@ public class MainActivity extends AppCompatActivity
     }
     /*
     TODO: 1. Kalender
-    TODO: 2. QR-Liste von FirebaseStorage & FirebaseDatabase mergen
-    TODO: 3. TODO-List Firebase tauglich machen
-    TODO: 4. Fragments (Kalender, TodoList und ShoopingList Mains) das andere bleiben Activities
-    TODO: 5. Design
+    TODO: 3. Fragments (Kalender, TodoList und ShoppingList Mains) das andere bleiben Activities
+    TODO: 4. Design
     */
 }

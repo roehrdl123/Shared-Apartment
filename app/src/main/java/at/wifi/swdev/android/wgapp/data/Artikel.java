@@ -70,4 +70,10 @@ public class Artikel implements Serializable
     {
         this.done = done;
     }
+
+    @Override
+    public String toString()
+    {
+        return title;
+    }
 }

@@ -7,7 +7,7 @@ public class Todo implements Serializable
     private String id;
     private String title;
     private String content;
-    private boolean erledigt = false;
+    private boolean done = false;
 
     public Todo(String title, String content)
     {
@@ -39,14 +39,14 @@ public class Todo implements Serializable
         this.content = content;
     }
 
-    public boolean isErledigt()
+    public boolean isDone()
     {
-        return erledigt;
+        return done;
     }
 
-    public void setErledigt(boolean erledigt)
+    public void setDone(boolean done)
     {
-        this.erledigt = erledigt;
+        this.done = done;
     }
 
     public String getId()
@@ -57,5 +57,11 @@ public class Todo implements Serializable
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    @Override
+    public String toString()
+    {
+        return title;
     }
 }

@@ -44,6 +44,15 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
                 listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
             }
         });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
+            }
+        });
         holder.editIV.setOnClickListener(new View.OnClickListener()
         {
             @Override

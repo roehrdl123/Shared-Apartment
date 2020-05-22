@@ -1,50 +1,57 @@
 package at.wifi.swdev.android.wgapp.qr;
 
-import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import java.util.List;
+
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.QRItems;
+import at.wifi.swdev.android.wgapp.onListItemClickListener;
 
-public class QrCodeListAdapter extends FirebaseRecyclerAdapter<QRItems, QrCodeListAdapter.QrListViewHolder>
+public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.QrListViewHolder>
 {
     private Bitmap bitmap;
+    private List<QRItems> items;
+    private onListItemClickListener onListItemClickListener;
+    private Resources resources;
 
-    public QrCodeListAdapter(@NonNull FirebaseRecyclerOptions<QRItems> options)
+    @Override
+    public QrListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        super(options);
+        return new QrListViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_qr_list_items, parent, false));
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final QrListViewHolder holder, int position, @NonNull final QRItems model)
+    public void onBindViewHolder(@NonNull final QrListViewHolder holder, int position)
     {
+        final QRItems model = items.get(position);
+
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                onClick(view);
+                onListItemClickListener.onListItemClick(model, 0);
             }
         });
 
-        holder.tvId.setText(R.string.id + model.getQrId());
-
+        holder.tvId.setText(resources.getString(R.string.id) + String.valueOf(model.getQrId()));
         holder.viewOccupied.setVisibility(model.isOccupied() ? View.VISIBLE : View.INVISIBLE);
-
         holder.ivDelete.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -59,7 +66,7 @@ public class QrCodeListAdapter extends FirebaseRecyclerAdapter<QRItems, QrCodeLi
             @Override
             public void onClick(View view)
             {
-                onClick(view);
+                onListItemClickListener.onListItemClick(model, 0);
             }
         });
 
@@ -75,16 +82,15 @@ public class QrCodeListAdapter extends FirebaseRecyclerAdapter<QRItems, QrCodeLi
         });
     }
 
-    @NonNull
     @Override
-    public QrListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public int getItemCount()
     {
-        return new QrListViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_qr_list_items, parent, false));
+        return items.size();
     }
 
     class QrListViewHolder extends RecyclerView.ViewHolder
     {
-        private TextView viewOccupied;
+        private LinearLayout viewOccupied;
         private TextView tvId;
         private ImageView ivQr;
         private ImageView ivEdit;
@@ -103,8 +109,18 @@ public class QrCodeListAdapter extends FirebaseRecyclerAdapter<QRItems, QrCodeLi
         }
     }
 
-    private void onClick(View view)
+    public void setItems(List<QRItems> items)
     {
-//TODO: EDIT / INFO ACTIVITY
+        this.items = items;
+    }
+
+    public void setOnListItemClickListener(at.wifi.swdev.android.wgapp.onListItemClickListener onListItemClickListener)
+    {
+        this.onListItemClickListener = onListItemClickListener;
+    }
+
+    public void setResources(Resources resources)
+    {
+        this.resources = resources;
     }
 }

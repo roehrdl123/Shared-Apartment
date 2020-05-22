@@ -23,4 +23,6 @@
     <string name="id">ID: </string>
     <string name="drucken">Drucken</string>
     <string name="qrcodeActionBar">QrCode Zuweisungstabelle</string>
+    <string name="erledigt">Erledigt</string>
+    <string name="no_template">Keine Vorlagen vorhanden</string>
 </resources>

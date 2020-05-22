@@ -1,32 +1,71 @@
 package at.wifi.swdev.android.wgapp.todolist;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Todo;
+import at.wifi.swdev.android.wgapp.onListItemClickListener;
+import at.wifi.swdev.android.wgapp.shoppinglist.ShowItemShoppingListActivity;
 
 public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapter.TodoViewHolder>
 {
+    private onListItemClickListener onListItemClickListener;
+    private Context context;
+
     public ToDoListAdapter(@NonNull FirebaseRecyclerOptions<Todo> options)
     {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull TodoViewHolder holder, int position, @NonNull Todo model)
+    protected void onBindViewHolder(@NonNull TodoViewHolder holder, int position, @NonNull final Todo model)
     {
         holder.titleTodoTV.setText(model.getTitle());
-        holder.doneTodoIV.setVisibility(model.isErledigt() ? View.VISIBLE : View.INVISIBLE);
+        holder.doneTodoIV.setVisibility(model.isDone() ? View.VISIBLE : View.INVISIBLE);
+
+        holder.infoTodoTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                onListItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
+            }
+        });
+        holder.editTodoTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                onListItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_EDIT);
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            onListItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
+        }
+    });
+        holder.deleteTodoTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                FirebaseDatabase.getInstance().getReference("todos").child(model.getId()).removeValue();
+                Toast.makeText(context, "Der Todo-Eintrag wurde gelöscht", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @NonNull
@@ -55,6 +94,15 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
             titleTodoTV = itemView.findViewById(R.id.tvTitleToDo);
             dividerTodo = itemView.findViewById(R.id.dividerToDo);
         }
+    }
+
+    public void setOnListItemClickListener(onListItemClickListener onListItemClickListener) {
+        this.onListItemClickListener = onListItemClickListener;
+    }
+
+    public void setContext(Context context)
+    {
+        this.context = context;
     }
 }
 

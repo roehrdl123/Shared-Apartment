@@ -8,21 +8,30 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Todo;
 import at.wifi.swdev.android.wgapp.databinding.ActivityTodoListMainBinding;
+import at.wifi.swdev.android.wgapp.onListItemClickListener;
 
-public class TodoListMainActivity extends AppCompatActivity
+public class TodoListMainActivity extends AppCompatActivity implements onListItemClickListener<Todo>
 {
     public static final int TODOLIST_CUSTOM_REQUEST_CODE = 123;
     private ActivityTodoListMainBinding binding;
@@ -43,6 +52,8 @@ public class TodoListMainActivity extends AppCompatActivity
         FirebaseRecyclerOptions<Todo> options = new FirebaseRecyclerOptions.Builder<Todo>().setLifecycleOwner(this).setQuery(todoQuery, Todo.class).build();
 
         ToDoListAdapter adapter = new ToDoListAdapter(options);
+        adapter.setContext(this);
+        adapter.setOnListItemClickListener(this);
 
         binding.rvTodoList.setLayoutManager(new LinearLayoutManager(this));
         binding.rvTodoList.setAdapter(adapter);
@@ -69,38 +80,60 @@ public class TodoListMainActivity extends AppCompatActivity
 
     public void onAddTemplateTodo(View view)
     {
-        dialogAdd.dismiss();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        FirebaseDatabase.getInstance().getReference("templates").child("todos").addListenerForSingleValueEvent(new ValueEventListener()
         {
-            public void onClick(DialogInterface dialog, int id)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                dialog.dismiss();
+                if (dataSnapshot.hasChildren())
+                {
+                    dialogAdd.dismiss();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TodoListMainActivity.this);
+
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builder.setPositiveButton(R.string.string_add, new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            onAddTemplate();
+                        }
+                    });
+
+                    builder.setTitle("Wähle aus einer Vorlage!");
+                    builder.setView(R.layout.popup_template_add_todo);
+
+                    dialogTemplate = builder.create();
+                    dialogTemplate.show();
+
+                    Spinner spinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
+
+                    List<Todo> todos = new ArrayList<>();
+                    for (DataSnapshot data : dataSnapshot.getChildren())
+                    {
+                        todos.add(data.getValue(Todo.class));
+                    }
+                    ArrayAdapter<Todo> spinnerArrayAdapter = new ArrayAdapter<Todo>(TodoListMainActivity.this, android.R.layout.simple_spinner_item, todos);
+                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(spinnerArrayAdapter);
+                }
+                else
+                {
+                    Toast.makeText(TodoListMainActivity.this, R.string.no_template, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
             }
         });
-
-        builder.setPositiveButton(R.string.string_add, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int id)
-            {
-                onAddTemplate();
-            }
-        });
-
-        builder.setTitle("Wähle aus einer Vorlage!");
-        builder.setView(R.layout.popup_template_add_todo);
-
-        dialogTemplate = builder.create();
-        dialogTemplate.show();
-
-
-        Spinner spinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
-        Query todotemplates = FirebaseDatabase.getInstance().getReference("templates").child("todos");
-        ///TODO: firebase query to array
-        spinnerArrayAdapter = new ArrayAdapter<Todo>(this, android.R.layout.simple_spinner_item);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerArrayAdapter);
     }
 
     public void onAddCustomTodo(View view)
@@ -112,16 +145,19 @@ public class TodoListMainActivity extends AppCompatActivity
 
     private void onAddTemplate()
     {
-        Spinner sp = dialogTemplate.findViewById(R.id.spTemplateTodo);
-        if (sp.getSelectedItem() != null)
+        Spinner spinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
+        if (spinner.getSelectedItem() != null)
         {
-            ///TODO: get Todo from spinner
-//            int pos = sp.getSelectedItemPosition();
-//            Todo todo = model.getTemplateAt(pos);
-//            model.addTodo(todo);
-//            adapter.setTodos(model.getTodos());
-//            adapter.notifyDataSetChanged();
+            Todo todo = (Todo) spinner.getAdapter().getItem(spinner.getSelectedItemPosition());
+            addToDatabase(todo);
         }
+    }
+
+    private void addToDatabase(Todo todo)
+    {
+        String key = FirebaseDatabase.getInstance().getReference("todos").push().getKey();
+        todo.setId(key);
+        FirebaseDatabase.getInstance().getReference("todos").child(key).setValue(todo);
     }
 
     @Override
@@ -132,7 +168,7 @@ public class TodoListMainActivity extends AppCompatActivity
             switch (requestCode)
             {
                 case TODOLIST_CUSTOM_REQUEST_CODE:
-                    customRequest(data);
+                    addToDatabase((Todo) data.getSerializableExtra(CustomTodoListActivity.EXTRA_ID));
                     break;
             }
         }
@@ -140,10 +176,12 @@ public class TodoListMainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void customRequest(Intent data)
+    @Override
+    public void onListItemClick(Todo model, int requestCode)
     {
-        FirebaseDatabase.getInstance().getReference("todos").push().setValue((Todo) data.getSerializableExtra(CustomTodoListActivity.EXTRA_ID));
-
-        //TODO: spinner updaten
+        Intent intent = new Intent(this, ShowItemTodoListActivity.class);
+        intent.putExtra(ShowItemTodoListActivity.REQUEST_CODE_EXTRA, requestCode);
+        intent.putExtra(ShowItemTodoListActivity.SERIALIZABLE_EXTRA, model);
+        startActivity(intent);
     }
 }

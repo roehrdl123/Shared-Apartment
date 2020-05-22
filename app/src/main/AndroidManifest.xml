@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.wifi.swdev.android.wgapp">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,11 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".qr.QrCodeListActivity"></activity>
-        <activity android:name=".qr.QrCodeAddTableActivity" />
-        <activity android:name=".qr.QrCodeUploadActivity" />
-        <activity android:name=".shoppinglist.ShowItemShoppingListActivity" />
-        <activity android:name=".todolist.CustomTodoListActivity" />
+        <activity
+            android:name=".todolist.ShowItemTodoListActivity"
+            android:parentActivityName=".todolist.TodoListMainActivity"/>
+        <activity
+            android:name=".qr.QrCodeListActivity"
+            android:parentActivityName=".shoppinglist.ShoppingListActivity" />
+        <activity
+            android:name=".qr.QrCodeAddTableActivity"
+            android:parentActivityName=".shoppinglist.QrCodeItemsActivity" />
+        <activity
+            android:name=".shoppinglist.ShowItemShoppingListActivity"
+            android:parentActivityName=".shoppinglist.ShoppingListActivity" />
+        <activity
+            android:name=".todolist.CustomTodoListActivity"
+            android:parentActivityName=".todolist.TodoListMainActivity" />
         <activity android:name=".todolist.TodoListMainActivity" />
         <activity
             android:name=".shoppinglist.CustomShoppingListActivity"
@@ -35,8 +48,5 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-permission android:name="android.permission.VIBRATE" />
 
 </manifest>

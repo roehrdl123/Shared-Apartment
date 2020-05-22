@@ -35,7 +35,6 @@ import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.databinding.ActivityShoopingListBinding;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
-import at.wifi.swdev.android.wgapp.qr.QrCodeAddTableActivity;
 import at.wifi.swdev.android.wgapp.qr.QrCodeListActivity;
 
 public class ShoppingListActivity extends AppCompatActivity implements onListItemClickListener<Artikel>
@@ -104,46 +103,53 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
 
     public void onAddTemplateShoppingList(View view)
     {
-        dialogAdd.dismiss();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int id)
-            {
-                dialog.dismiss();
-            }
-        });
-
-        builder.setPositiveButton(R.string.string_add, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int id)
-            {
-                onAddTemplate();
-            }
-        });
-
-        builder.setTitle("Wähle aus einer Vorlage!");
-        builder.setView(R.layout.popup_template_add_shopping);
-
-        dialogTemplate = builder.create();
-        dialogTemplate.show();
-
-        templateSpinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
 
         FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                List<Artikel> artikel = new ArrayList<>();
-                for (DataSnapshot data : dataSnapshot.getChildren())
+                if (dataSnapshot.hasChildren())
                 {
-                    artikel.add(data.getValue(Artikel.class));
+                    dialogAdd.dismiss();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
+
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builder.setPositiveButton(R.string.string_add, new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            onAddTemplate();
+                        }
+                    });
+
+                    builder.setTitle("Wähle aus einer Vorlage!");
+                    builder.setView(R.layout.popup_template_add_shopping);
+
+                    dialogTemplate = builder.create();
+                    dialogTemplate.show();
+
+                    templateSpinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
+                    List<Artikel> artikel = new ArrayList<>();
+                    for (DataSnapshot data : dataSnapshot.getChildren())
+                    {
+                        artikel.add(data.getValue(Artikel.class));
+                    }
+                    ArrayAdapter<Artikel> spinnerArrayAdapter = new ArrayAdapter<Artikel>(ShoppingListActivity.this, android.R.layout.simple_spinner_item, artikel);
+                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    templateSpinner.setAdapter(spinnerArrayAdapter);
                 }
-                ArrayAdapter<Artikel> spinnerArrayAdapter = new ArrayAdapter<Artikel>(ShoppingListActivity.this, android.R.layout.simple_spinner_item, artikel);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                templateSpinner.setAdapter(spinnerArrayAdapter);
+                else
+                {
+                    Toast.makeText(ShoppingListActivity.this, R.string.no_template, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
