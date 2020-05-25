@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Arrays;
 import java.util.List;
 
+import at.wifi.swdev.android.wgapp.calendar.CalendarMainActivity;
 import at.wifi.swdev.android.wgapp.data.User;
 import at.wifi.swdev.android.wgapp.databinding.ActivityMainBinding;
 import at.wifi.swdev.android.wgapp.shoppinglist.ShoppingListActivity;
@@ -116,6 +117,12 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "Failed to sign in: " + response.getError());
             }
         }
+    }
+
+    public void onOpenCalendar(View view)
+    {
+        Intent intent = new Intent(this, CalendarMainActivity.class);
+        startActivity(intent);
     }
     /*
     TODO: 1. Kalender

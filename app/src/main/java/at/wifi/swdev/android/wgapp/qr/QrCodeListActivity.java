@@ -45,7 +45,6 @@ public class QrCodeListActivity extends AppCompatActivity implements onListItemC
         setContentView(binding.getRoot());
 
         getSupportActionBar().setTitle(R.string.qrcodeActionBar);
-        //TODO: RecylcerView Einbauen mit Map Qr
 
         findQr();
     }
@@ -193,6 +192,9 @@ public class QrCodeListActivity extends AppCompatActivity implements onListItemC
     @Override
     public void onListItemClick(QRItems model, int requestCode)
     {
-        //TODO: Activity für Editieren und Anzeigen des QR-Codes
+        Intent intent = new Intent(this, QrCodeListEditActivity.class);
+        intent.putExtra(QrCodeListEditActivity.EXTRA_INC, requestCode);
+        intent.putExtra(QrCodeListEditActivity.EXTRA_INC_MODEL, model);
+        startActivity(intent);
     }
 }

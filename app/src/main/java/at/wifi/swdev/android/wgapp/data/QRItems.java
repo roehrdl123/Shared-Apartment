@@ -1,8 +1,9 @@
 package at.wifi.swdev.android.wgapp.data;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class QRItems
+public class QRItems implements Serializable
 {
     private String key;
     private int qrId;

@@ -29,10 +29,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvAnzahl"
-        app:layout_constraintTop_toBottomOf="@+id/spTemplateTodo" />
+        app:layout_constraintTop_toBottomOf="@+id/spCalendar" />
 
     <Spinner
-        android:id="@+id/spTemplateTodo"
+        android:id="@+id/spCalendar"
         style="@style/spinner_style"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -50,7 +50,7 @@
         android:text="@string/vorlage"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        app:layout_constraintEnd_toEndOf="@+id/spTemplateTodo"
-        app:layout_constraintStart_toStartOf="@+id/spTemplateTodo"
+        app:layout_constraintEnd_toEndOf="@+id/spCalendar"
+        app:layout_constraintStart_toStartOf="@+id/spCalendar"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

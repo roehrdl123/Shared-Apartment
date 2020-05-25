@@ -136,7 +136,7 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
                     dialogTemplate = builder.create();
                     dialogTemplate.show();
 
-                    templateSpinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
+                    templateSpinner = dialogTemplate.findViewById(R.id.spCalendar);
                     List<Artikel> artikel = new ArrayList<>();
                     for (DataSnapshot data : dataSnapshot.getChildren())
                     {
@@ -163,7 +163,7 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
     public void onAddTemplate()
     {
 
-        Spinner spinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
+        Spinner spinner = dialogTemplate.findViewById(R.id.spCalendar);
         if (spinner.getSelectedItem() != null)
         {
             Artikel a = (Artikel) spinner.getAdapter().getItem(spinner.getSelectedItemPosition());

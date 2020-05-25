@@ -33,15 +33,15 @@
         android:gravity="center"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/llActions"
+        app:layout_constraintEnd_toStartOf="@+id/llActions"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ivDoneToDo"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="@+id/llActions"
         tools:text="Test" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/llActions"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"

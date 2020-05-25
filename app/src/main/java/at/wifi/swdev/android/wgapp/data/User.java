@@ -6,7 +6,7 @@ public class User implements Serializable
 {
     public String id;
     public String name;
-    public String imageURL;
+    public String calendarName;
 
 
     public User()
@@ -14,17 +14,10 @@ public class User implements Serializable
 
     }
 
-    public User(String id, String name, String imageURL)
-    {
-        this.id = id;
-        this.name = name;
-        this.imageURL = imageURL;
-    }
-
     public User(String id, String name)
     {
         this.id = id;
         this.name = name;
-        imageURL = "";
+        calendarName = "";
     }
 }

@@ -112,7 +112,7 @@ public class TodoListMainActivity extends AppCompatActivity implements onListIte
                     dialogTemplate = builder.create();
                     dialogTemplate.show();
 
-                    Spinner spinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
+                    Spinner spinner = dialogTemplate.findViewById(R.id.spCalendar);
 
                     List<Todo> todos = new ArrayList<>();
                     for (DataSnapshot data : dataSnapshot.getChildren())
@@ -145,7 +145,7 @@ public class TodoListMainActivity extends AppCompatActivity implements onListIte
 
     private void onAddTemplate()
     {
-        Spinner spinner = dialogTemplate.findViewById(R.id.spTemplateTodo);
+        Spinner spinner = dialogTemplate.findViewById(R.id.spCalendar);
         if (spinner.getSelectedItem() != null)
         {
             Todo todo = (Todo) spinner.getAdapter().getItem(spinner.getSelectedItemPosition());

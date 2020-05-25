@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -189,9 +190,41 @@ public class QrCodeAddTableActivity extends AppCompatActivity
         FirebaseDatabase.getInstance().getReference("qrcodes").child(qr.getKey()).child("items").child(key).setValue(artikel);
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        onFinish(null);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        onFinish(null);
+        super.onDestroy();
+    }
+
     public void onFinish(View view)
     {
-        finish();
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("qrcodes").child(qr.getKey());
+        ref.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if (!dataSnapshot.hasChild("items"))
+                {
+                    ref.removeValue();
+                    Toast.makeText(QrCodeAddTableActivity.this, "Der Qr-Code wurde gelöscht, da keine Artikel hinzugefügt wurden", Toast.LENGTH_SHORT).show();
+                }
+                finish();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
+
+            }
+        });
     }
 
     @Override
