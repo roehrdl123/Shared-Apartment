@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".calendar.CalendarMainActivity"></activity>
+<!--        <activity-->
+<!--            android:name=".MainActivityBN"-->
+<!--            android:label="@string/title_activity_main_b_n"/>-->
+        <activity android:name=".calendar.CalendarAddActivity" />
+        <activity android:name=".calendar.CalendarMainActivity" />
         <activity
             android:name=".qr.QrCodeListEditActivity"
             android:parentActivityName=".qr.QrCodeListActivity" />
@@ -18,30 +22,30 @@
             android:parentActivityName=".todolist.TodoListMainActivity" />
         <activity
             android:name=".qr.QrCodeListActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListActivity" />
+            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
         <activity
             android:name=".qr.QrCodeAddTableActivity"
             android:parentActivityName=".shoppinglist.QrCodeItemsActivity" />
         <activity
             android:name=".shoppinglist.ShowItemShoppingListActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListActivity" />
+            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
         <activity
             android:name=".todolist.CustomTodoListActivity"
             android:parentActivityName=".todolist.TodoListMainActivity" />
         <activity android:name=".todolist.TodoListMainActivity" />
         <activity
             android:name=".shoppinglist.CustomShoppingListActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListActivity" />
+            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
         <activity
             android:name=".shoppinglist.QrCodeItemsActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListActivity" />
+            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
         <activity
             android:name=".shoppinglist.QrCodeScannerActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListActivity" />
+            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
         <activity
-            android:name=".shoppinglist.ShoppingListActivity"
+            android:name=".shoppinglist.ShoppingListFragment"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivityBN">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,11 +53,10 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
-
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
 </manifest>

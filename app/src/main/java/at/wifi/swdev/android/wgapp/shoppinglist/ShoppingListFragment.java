@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -14,7 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,44 +36,52 @@ import java.util.Map;
 
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
-import at.wifi.swdev.android.wgapp.databinding.ActivityShoopingListBinding;
+import at.wifi.swdev.android.wgapp.databinding.FragmentShoopingListBinding;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
 import at.wifi.swdev.android.wgapp.qr.QrCodeListActivity;
 
-public class ShoppingListActivity extends AppCompatActivity implements onListItemClickListener<Artikel>
+import static android.app.Activity.RESULT_OK;
+
+public class ShoppingListFragment extends Fragment implements onListItemClickListener<Artikel>
 {
     public static final int REQUEST_CODE_QR = 11;
     public static final int REQUEST_CODE_ADD = 12;
-    private ActivityShoopingListBinding binding;
     private ShoppingListAdapter adapter;
     private AlertDialog dialogAdd;
     private AlertDialog dialogTemplate;
     private RecyclerView recyclerView;
     private Spinner templateSpinner;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        binding = ActivityShoopingListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        View root = inflater.inflate(R.layout.fragment_shooping_list, container, false);
 
-        recyclerView = binding.rvShoppingList;
-
+        recyclerView = root.findViewById(R.id.rvShoppingList);
+        root.findViewById(R.id.btnAddToShop).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                addShoppingList(view);
+            }
+        });
         Query shoppinglistQuery = FirebaseDatabase.getInstance().getReference("shoppinglist");
 
         FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(this).setQuery(shoppinglistQuery, Artikel.class).build();
 
         adapter = new ShoppingListAdapter(options);
         adapter.setOnClickListener(this);
-        adapter.setContext(this);
-        binding.rvShoppingList.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvShoppingList.setAdapter(adapter);
+        adapter.setContext(getContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+        return root;
     }
 
     public void addShoppingList(View view)
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
         {
@@ -85,18 +96,20 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
 
         dialogAdd = builder.create();
         dialogAdd.show();
+        addListeners(dialogAdd);
+
     }
 
     public void onAddQRShoppingList(View view)
     {
-        Intent intent = new Intent(this, QrCodeScannerActivity.class);
+        Intent intent = new Intent(getContext(), QrCodeScannerActivity.class);
         startActivityForResult(intent, REQUEST_CODE_QR);
         dialogAdd.dismiss();
     }
 
     public void onAddCustomShoppingList(View view)
     {
-        Intent intent = new Intent(this, CustomShoppingListActivity.class);
+        Intent intent = new Intent(getContext(), CustomShoppingListActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ADD);
         dialogAdd.dismiss();
     }
@@ -112,7 +125,7 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
                 if (dataSnapshot.hasChildren())
                 {
                     dialogAdd.dismiss();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                     {
@@ -142,13 +155,13 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
                     {
                         artikel.add(data.getValue(Artikel.class));
                     }
-                    ArrayAdapter<Artikel> spinnerArrayAdapter = new ArrayAdapter<Artikel>(ShoppingListActivity.this, android.R.layout.simple_spinner_item, artikel);
+                    ArrayAdapter<Artikel> spinnerArrayAdapter = new ArrayAdapter<Artikel>(getContext(), android.R.layout.simple_spinner_item, artikel);
                     spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     templateSpinner.setAdapter(spinnerArrayAdapter);
                 }
                 else
                 {
-                    Toast.makeText(ShoppingListActivity.this, R.string.no_template, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.no_template, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -178,7 +191,7 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         if (RESULT_OK == resultCode && data != null)
         {
@@ -191,7 +204,7 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
                     addToDatabase((Artikel) data.getSerializableExtra(CustomShoppingListActivity.ITEM_EXTRA));
                     break;
                 default:
-                    Toast.makeText(this, "Fehler!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Fehler!", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -226,17 +239,17 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
     @Override
     public void onListItemClick(Artikel model, int requestcode)
     {
-        Intent intent = new Intent(this, ShowItemShoppingListActivity.class);
+        Intent intent = new Intent(getContext(), ShowItemShoppingListActivity.class);
         intent.putExtra(ShowItemShoppingListActivity.REQUEST_CODE_EXTRA, requestcode);
         intent.putExtra(ShowItemShoppingListActivity.SERIALIZABLE_EXTRA, model);
         startActivity(intent);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater)
     {
-        getMenuInflater().inflate(R.menu.qr_codes, menu);
-        return super.onCreateOptionsMenu(menu);
+        inflater.inflate(R.menu.qr_codes, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -254,7 +267,36 @@ public class ShoppingListActivity extends AppCompatActivity implements onListIte
 
     private void startQrMenu()
     {
-        Intent intent = new Intent(this, QrCodeListActivity.class);
+        Intent intent = new Intent(getContext(), QrCodeListActivity.class);
         startActivity(intent);
+    }
+
+    private void addListeners(AlertDialog dialog)
+    {
+        dialogAdd.findViewById(R.id.btnQrShopping).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onAddQRShoppingList(view);
+            }
+        });
+
+        dialogAdd.findViewById(R.id.btnCustomShopping).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onAddCustomShoppingList(view);
+            }
+        });
+        dialogAdd.findViewById(R.id.btnVorlageShopping).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onAddTemplateShoppingList(view);
+            }
+        });
     }
 }

@@ -25,4 +25,9 @@
     <string name="qrcodeActionBar">QrCode Zuweisungstabelle</string>
     <string name="erledigt">Erledigt</string>
     <string name="no_template">Keine Vorlagen vorhanden</string>
+    <string name="week_number">Kalenderwoche:   </string>
+    <string name="title_activity_main_b_n">MainActivityBN</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

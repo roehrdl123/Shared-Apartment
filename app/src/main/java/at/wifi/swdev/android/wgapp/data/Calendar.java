@@ -1,6 +1,8 @@
 package at.wifi.swdev.android.wgapp.data;
 
-public class Calendar
+import java.io.Serializable;
+
+public class Calendar implements Serializable
 {
     private String id;
     private String title;

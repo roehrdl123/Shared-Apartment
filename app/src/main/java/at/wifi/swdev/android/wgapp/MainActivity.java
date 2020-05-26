@@ -27,7 +27,7 @@ import java.util.List;
 import at.wifi.swdev.android.wgapp.calendar.CalendarMainActivity;
 import at.wifi.swdev.android.wgapp.data.User;
 import at.wifi.swdev.android.wgapp.databinding.ActivityMainBinding;
-import at.wifi.swdev.android.wgapp.shoppinglist.ShoppingListActivity;
+import at.wifi.swdev.android.wgapp.shoppinglist.ShoppingListFragment;
 import at.wifi.swdev.android.wgapp.todolist.TodoListMainActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
 
     public void onShoppingList(View view)
     {
-        Intent intent = new Intent(this, ShoppingListActivity.class);
+        Intent intent = new Intent(this, ShoppingListFragment.class);
         startActivity(intent);
     }
 
