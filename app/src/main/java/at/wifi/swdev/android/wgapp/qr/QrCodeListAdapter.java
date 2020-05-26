@@ -17,19 +17,21 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.QRItems;
-import at.wifi.swdev.android.wgapp.onListItemClickListener;
 
 public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.QrListViewHolder>
 {
     private Bitmap bitmap;
     private List<QRItems> items;
-    private onListItemClickListener onListItemClickListener;
+    private at.wifi.swdev.android.wgapp.onListItemClickListener<QRItems> onListItemClickListener;
     private Resources resources;
 
+    @NotNull
     @Override
     public QrListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
@@ -41,8 +43,8 @@ public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.Qr
     {
         final QRItems model = items.get(position);
 
-
-        holder.tvId.setText(resources.getString(R.string.id) + String.valueOf(model.getQrId()));
+        String string = resources.getString(R.string.id) + model.getQrId();
+        holder.tvId.setText(string);
         holder.viewOccupied.setVisibility(model.isOccupied() ? View.VISIBLE : View.INVISIBLE);
 
         if(model.isOccupied())
@@ -99,7 +101,7 @@ public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.Qr
         return items.size();
     }
 
-    class QrListViewHolder extends RecyclerView.ViewHolder
+    static class QrListViewHolder extends RecyclerView.ViewHolder
     {
         private LinearLayout viewOccupied;
         private TextView tvId;
@@ -108,7 +110,7 @@ public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.Qr
         private ImageView ivDelete;
         private LinearLayout llActions;
 
-        public QrListViewHolder(@NonNull View itemView)
+        QrListViewHolder(@NonNull View itemView)
         {
             super(itemView);
             tvId = itemView.findViewById(R.id.tvIdQrList);
@@ -120,17 +122,16 @@ public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.Qr
         }
     }
 
-    public void setItems(List<QRItems> items)
+    void setItems(List<QRItems> items)
     {
         this.items = items;
     }
 
-    public void setOnListItemClickListener(at.wifi.swdev.android.wgapp.onListItemClickListener onListItemClickListener)
-    {
+    public void setOnListItemClickListener(at.wifi.swdev.android.wgapp.onListItemClickListener<QRItems> onListItemClickListener) {
         this.onListItemClickListener = onListItemClickListener;
     }
 
-    public void setResources(Resources resources)
+    void setResources(Resources resources)
     {
         this.resources = resources;
     }

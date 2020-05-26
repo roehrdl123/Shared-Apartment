@@ -8,12 +8,26 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
+import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
+import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,42 +37,40 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import at.wifi.swdev.android.wgapp.R;
-import at.wifi.swdev.android.wgapp.databinding.ActivityCalendarMainBinding;
+import at.wifi.swdev.android.wgapp.onListItemClickListener;
 
-public class CalendarMainActivity extends AppCompatActivity
+import static android.app.Activity.RESULT_OK;
+
+public class CalendarMainFragment extends Fragment implements onListItemClickListener<at.wifi.swdev.android.wgapp.data.Calendar>
 {
     public static final int REQUEST_CODE_PERMISSION = 2;
     public static final String CAL_EXTRA = "calExtra";
-    private ActivityCalendarMainBinding binding;
-    private static final String TAG = CalendarMainActivity.class.getSimpleName();
     private AlertDialog dialog;
     private int myID = -1;
+    private View root;
+    private CalendarView calendarView;
     private Calendar currDate = Calendar.getInstance();
 
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        binding = ActivityCalendarMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        binding.calendar.showCurrentMonthPage();
-        binding.calendar.setSwipeEnabled(true);
+        root = inflater.inflate(R.layout.fragment_calendar_main, container, false);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)
+        super.onCreate(savedInstanceState);
+
+        calendarView = root.findViewById(R.id.calendar);
+        calendarView.showCurrentMonthPage();
+        calendarView.setSwipeEnabled(true);
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)
         {
             //Permission already granted
             FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener()
@@ -70,6 +82,13 @@ public class CalendarMainActivity extends AppCompatActivity
                     {
                         myID = dataSnapshot.getValue(Integer.class);
                     }
+                    root.findViewById(R.id.btnAddCal).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            onNewCalendarEntry(v);
+                        }
+                    });
                     request();
                 }
 
@@ -82,8 +101,9 @@ public class CalendarMainActivity extends AppCompatActivity
         }
         else
         {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, REQUEST_CODE_PERMISSION);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, REQUEST_CODE_PERMISSION);
         }
+        return root;
     }
 
     //            if(myID == -1)
@@ -110,39 +130,30 @@ public class CalendarMainActivity extends AppCompatActivity
 //            }
     private void request()
     {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)
         {
+
             String textHelper = getResources().getString(R.string.week_number) + String.valueOf(currDate.get(Calendar.WEEK_OF_YEAR));
             SpannableString underlinedString = new SpannableString(textHelper);
             underlinedString.setSpan(new UnderlineSpan(), 0, underlinedString.length(), 0);
-            binding.tvWeekNumber.setText(underlinedString);
+            ((TextView)root.findViewById(R.id.tvWeekNumber)).setText(underlinedString);
+
             Query query = FirebaseDatabase.getInstance().getReference("cal").child(currDate.get(Calendar.YEAR) + "/" + currDate.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
 
             FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
 
             final CalendarMainAdapter adapter = new CalendarMainAdapter(options);
 
-            binding.rvCal.setLayoutManager(new LinearLayoutManager(this));
-            binding.rvCal.setAdapter(adapter);
-            binding.calendar.setOnDayClickListener(new OnDayClickListener()
-            {
-                @Override
-                public void onDayClick(EventDay eventDay)
-                {
-                    Calendar cal = eventDay.getCalendar();
+            adapter.setClickListener(this);
 
-                    Query query = FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
-                    FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainActivity.this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
-                    adapter.updateOptions(options);
-                    adapter.notifyDataSetChanged();
-                    String textHelper = getResources().getString(R.string.week_number) + String.valueOf(cal.get(Calendar.WEEK_OF_YEAR));
-                    SpannableString underlinedString = new SpannableString(textHelper);
-                    underlinedString.setSpan(new UnderlineSpan(), 0, underlinedString.length(), 0);
-                    binding.tvWeekNumber.setText(underlinedString);
-                }
-            });
+            final RecyclerView recyclerView = root.findViewById(R.id.rvCal);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(adapter);
 
-            //setEvents();
+
+            setListeners(adapter);
+
+            setEvents();
         }
     }
 
@@ -167,7 +178,7 @@ public class CalendarMainActivity extends AppCompatActivity
 
                 for (Integer i : weeks)
                 {
-                    FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + cal.get(i)).orderByChild("dateStart").addListenerForSingleValueEvent(new ValueEventListener()
+                    FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + i).orderByChild("dateStart").addListenerForSingleValueEvent(new ValueEventListener()
                     {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -188,7 +199,7 @@ public class CalendarMainActivity extends AppCompatActivity
                         }
                     });
                 }
-                binding.calendar.setEvents(events);
+                calendarView.setEvents(events);
 
             }
 
@@ -200,11 +211,57 @@ public class CalendarMainActivity extends AppCompatActivity
         });
     }
 
+    private void setListeners(final CalendarMainAdapter adapter)
+    {
+        calendarView.setOnDayClickListener(new OnDayClickListener()
+        {
+            @Override
+            public void onDayClick(EventDay eventDay)
+            {
+                Calendar cal = eventDay.getCalendar();
+
+                Query query = FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
+                FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainFragment.this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
+                adapter.updateOptions(options);
+                adapter.notifyDataSetChanged();
+                String textHelper = getResources().getString(R.string.week_number) + String.valueOf(cal.get(Calendar.WEEK_OF_YEAR));
+                SpannableString underlinedString = new SpannableString(textHelper);
+                underlinedString.setSpan(new UnderlineSpan(), 0, underlinedString.length(), 0);
+                ((TextView)root.findViewById(R.id.tvWeekNumber)).setText(underlinedString);
+
+                try
+                {
+                    calendarView.setDate(cal);
+                }
+                catch (OutOfDateRangeException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        calendarView.setOnForwardPageChangeListener(new OnCalendarPageChangeListener() {
+            @Override
+            public void onChange()
+            {
+                setNothingRV(adapter);
+            }
+        });
+
+        calendarView.setOnPreviousPageChangeListener(new OnCalendarPageChangeListener() {
+            @Override
+            public void onChange()
+            {
+                setNothingRV(adapter);
+            }
+        });
+    }
+
     private void onChooser(final Map<String, String> map)
     {
         if (map.size() > 0)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
             {
@@ -230,17 +287,17 @@ public class CalendarMainActivity extends AppCompatActivity
 
             Spinner spinner = dialog.findViewById(R.id.spCalendar);
             List<String> list = new ArrayList<>(map.values());
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(CalendarMainActivity.this, android.R.layout.simple_spinner_item, list);
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(spinnerArrayAdapter);
         }
         else
         {
-            Toast.makeText(this, "Kein Kalender vorhanden!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Kein Kalender vorhanden!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void onCalendarChosen(Map<String, String> map)
+    private void onCalendarChosen(Map<String, String> map)
     {
         Spinner spinner = dialog.findViewById(R.id.spCalendar);
         int position = spinner.getSelectedItemPosition();
@@ -263,20 +320,20 @@ public class CalendarMainActivity extends AppCompatActivity
             }
             else
             {
-                Toast.makeText(this, "Ohne Berechtigung kann das Programm möglicherweise nicht richtig funktionieren.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Ohne Berechtigung kann das Programm möglicherweise nicht richtig funktionieren.", Toast.LENGTH_SHORT).show();
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    public void onNewCalendarEntry(View view)
+    private void onNewCalendarEntry(View view)
     {
-        Intent intent = new Intent(this, CalendarAddActivity.class);
+        Intent intent = new Intent(getContext(), CalendarAddActivity.class);
         startActivityForResult(intent, CalendarAddActivity.REQUEST_CODE_CAL_ADD);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         if (resultCode == RESULT_OK && data != null)
         {
@@ -288,9 +345,24 @@ public class CalendarMainActivity extends AppCompatActivity
                 calendar.setTimeInMillis(cal.getDateStart());
                 List<EventDay> eventDays = new ArrayList<>();
                 eventDays.add(new EventDay(calendar, R.drawable.ic_event_black_24dp));
-                binding.calendar.setEvents(eventDays);
+                calendarView.setEvents(eventDays);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setNothingRV(CalendarMainAdapter adapter)
+    {
+        Query query1 = FirebaseDatabase.getInstance().getReference("1");
+        FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainFragment.this).setQuery(query1, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
+        adapter.updateOptions(options);
+        adapter.notifyDataSetChanged();
+        ((TextView)root.findViewById(R.id.tvWeekNumber)).setText("");
+    }
+
+    @Override
+    public void onListItemClick(at.wifi.swdev.android.wgapp.data.Calendar model, int requestCode)
+    {
+
     }
 }

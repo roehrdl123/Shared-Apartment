@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/nav_shoppinglist">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="at.wifi.swdev.android.wgapp.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_todo"
+        android:name="at.wifi.swdev.android.wgapp.todolist.TodoListMainFragment"
+        android:label="@string/todo"
+        tools:layout="@layout/fragment_todo_list_main" />
 
     <fragment
         android:id="@+id/nav_shoppinglist"
         android:name="at.wifi.swdev.android.wgapp.shoppinglist.ShoppingListFragment"
-        android:label="ShoppingList"
+        android:label="@string/shoppingList"
         tools:layout="@layout/fragment_shooping_list" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="at.wifi.swdev.android.wgapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/nav_cal"
+        android:name="at.wifi.swdev.android.wgapp.calendar.CalendarMainFragment"
+        android:label="@string/calendar"
+        tools:layout="@layout/fragment_calendar_main" />
 </navigation>

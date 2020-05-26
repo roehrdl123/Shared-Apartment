@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/tv_Titel"
+        android:text="@string/title"
         app:layout_constraintBottom_toBottomOf="@+id/tvTitelCal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvTitelCal" />
@@ -23,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/textView28"
         app:layout_constraintStart_toEndOf="@+id/textView25"
         app:layout_constraintTop_toTopOf="@+id/textView29"
-        tools:text="@string/tv_Titel" />
+        tools:text="@string/title" />
 
     <TextView
         android:id="@+id/tvStartDate"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Ende"
+        android:text="@string/end"
         app:layout_constraintEnd_toEndOf="@+id/textView29"
         app:layout_constraintStart_toStartOf="@+id/textView29"
         app:layout_constraintTop_toBottomOf="@+id/textView29" />
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:text="Start"
+        android:text="@string/start"
         app:layout_constraintStart_toEndOf="@+id/tvTitelCal"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,10 +59,10 @@
         android:id="@+id/tvEndDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_marginStart="8dp"
-        android:text="12.05.2019 12:30"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView28"
-        app:layout_constraintTop_toTopOf="@+id/textView28" />
+        app:layout_constraintTop_toTopOf="@+id/textView28"
+        tools:text="12.05.2019 12:30" />
 </androidx.constraintlayout.widget.ConstraintLayout>

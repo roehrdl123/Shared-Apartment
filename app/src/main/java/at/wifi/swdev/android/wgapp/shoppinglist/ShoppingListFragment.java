@@ -36,7 +36,6 @@ import java.util.Map;
 
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
-import at.wifi.swdev.android.wgapp.databinding.FragmentShoopingListBinding;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
 import at.wifi.swdev.android.wgapp.qr.QrCodeListActivity;
 
@@ -44,12 +43,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class ShoppingListFragment extends Fragment implements onListItemClickListener<Artikel>
 {
-    public static final int REQUEST_CODE_QR = 11;
-    public static final int REQUEST_CODE_ADD = 12;
-    private ShoppingListAdapter adapter;
+    private static final int REQUEST_CODE_QR = 11;
+    private static final int REQUEST_CODE_ADD = 12;
     private AlertDialog dialogAdd;
     private AlertDialog dialogTemplate;
-    private RecyclerView recyclerView;
     private Spinner templateSpinner;
 
     @Nullable
@@ -58,20 +55,22 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
     {
         View root = inflater.inflate(R.layout.fragment_shooping_list, container, false);
 
-        recyclerView = root.findViewById(R.id.rvShoppingList);
+        setHasOptionsMenu(true);
+
+        RecyclerView recyclerView = root.findViewById(R.id.rvShoppingList);
         root.findViewById(R.id.btnAddToShop).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                addShoppingList(view);
+                addShoppingList();
             }
         });
         Query shoppinglistQuery = FirebaseDatabase.getInstance().getReference("shoppinglist");
 
         FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(this).setQuery(shoppinglistQuery, Artikel.class).build();
 
-        adapter = new ShoppingListAdapter(options);
+        ShoppingListAdapter adapter = new ShoppingListAdapter(options);
         adapter.setOnClickListener(this);
         adapter.setContext(getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -79,7 +78,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
         return root;
     }
 
-    public void addShoppingList(View view)
+    private void addShoppingList()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -96,25 +95,25 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
 
         dialogAdd = builder.create();
         dialogAdd.show();
-        addListeners(dialogAdd);
+        addListeners();
 
     }
 
-    public void onAddQRShoppingList(View view)
+    private void onAddQRShoppingList()
     {
         Intent intent = new Intent(getContext(), QrCodeScannerActivity.class);
         startActivityForResult(intent, REQUEST_CODE_QR);
         dialogAdd.dismiss();
     }
 
-    public void onAddCustomShoppingList(View view)
+    private void onAddCustomShoppingList()
     {
         Intent intent = new Intent(getContext(), CustomShoppingListActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ADD);
         dialogAdd.dismiss();
     }
 
-    public void onAddTemplateShoppingList(View view)
+    private void onAddTemplateShoppingList()
     {
 
         FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").addListenerForSingleValueEvent(new ValueEventListener()
@@ -155,7 +154,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
                     {
                         artikel.add(data.getValue(Artikel.class));
                     }
-                    ArrayAdapter<Artikel> spinnerArrayAdapter = new ArrayAdapter<Artikel>(getContext(), android.R.layout.simple_spinner_item, artikel);
+                    ArrayAdapter<Artikel> spinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, artikel);
                     spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     templateSpinner.setAdapter(spinnerArrayAdapter);
                 }
@@ -173,7 +172,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
     }
 
 
-    public void onAddTemplate()
+    private void onAddTemplate()
     {
 
         Spinner spinner = dialogTemplate.findViewById(R.id.spCalendar);
@@ -255,14 +254,12 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     {
-        switch (item.getItemId())
+        if (item.getItemId() == R.id.menuQrTable)
         {
-            case R.id.menuQrTable:
-                startQrMenu();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            startQrMenu();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void startQrMenu()
@@ -271,14 +268,14 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
         startActivity(intent);
     }
 
-    private void addListeners(AlertDialog dialog)
+    private void addListeners()
     {
         dialogAdd.findViewById(R.id.btnQrShopping).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                onAddQRShoppingList(view);
+                onAddQRShoppingList();
             }
         });
 
@@ -287,7 +284,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
             @Override
             public void onClick(View view)
             {
-                onAddCustomShoppingList(view);
+                onAddCustomShoppingList();
             }
         });
         dialogAdd.findViewById(R.id.btnVorlageShopping).setOnClickListener(new View.OnClickListener()
@@ -295,7 +292,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
             @Override
             public void onClick(View view)
             {
-                onAddTemplateShoppingList(view);
+                onAddTemplateShoppingList();
             }
         });
     }

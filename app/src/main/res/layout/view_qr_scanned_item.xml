@@ -9,7 +9,7 @@
         android:id="@+id/textView8"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/tv_Titel"
+        android:text="@string/title"
         android:textSize="18sp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/textView9"
@@ -24,7 +24,7 @@
         android:gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/tv_anzahl"
+        android:text="@string/quantity"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +38,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
-        android:text="Anzahl ändern"
+        android:text="@string/change_quantity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toStartOf="@+id/ivDelete"
         app:layout_constraintStart_toEndOf="@+id/txAmount"
         app:layout_constraintTop_toTopOf="@+id/txAmount"
-        tools:text="@string/tv_Titel" />
+        tools:text="@string/title" />
 
     <EditText
         android:id="@+id/txAmount"
@@ -64,12 +64,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/tv_anzahl"
+        android:hint="@string/quantity"
         android:inputType="number"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/textView9"
         app:layout_constraintStart_toStartOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        android:autofillHints="" />
 
     <ImageView
         android:id="@+id/ivDelete"

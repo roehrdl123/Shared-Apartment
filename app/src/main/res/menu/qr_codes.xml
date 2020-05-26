@@ -5,6 +5,6 @@
     <item
         android:id="@+id/menuQrTable"
         android:icon="@drawable/qrcodescan_120401"
-        android:title="@string/qrmenu"
+        android:title="@string/qrMenu"
         app:showAsAction="always" />
 </menu>

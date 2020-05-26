@@ -1,5 +1,6 @@
 package at.wifi.swdev.android.wgapp.shoppinglist;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
@@ -21,16 +22,15 @@ import at.wifi.swdev.android.wgapp.onListItemClickListener;
 public class QrCodeItemsAdapter extends RecyclerView.Adapter<QrCodeItemsAdapter.QrItemViewHolder>
 {
     private List<Artikel> artikel;
-    private Context context;
     private LayoutInflater inflater;
     private onListItemClickListener<Artikel> onListItemClickListener;
 
-    public QrCodeItemsAdapter(Context context)
+    QrCodeItemsAdapter(Context context)
     {
-        this.context = context;
         this.inflater = LayoutInflater.from(context);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final QrItemViewHolder holder, final int position)
     {
@@ -73,14 +73,14 @@ public class QrCodeItemsAdapter extends RecyclerView.Adapter<QrCodeItemsAdapter.
         return artikel.size();
     }
 
-    class QrItemViewHolder extends RecyclerView.ViewHolder
+    static class QrItemViewHolder extends RecyclerView.ViewHolder
     {
         private Button btnChangeQuantitiy;
         private EditText etQuantity;
         private TextView tvTitle;
         private ImageView ivDelete;
 
-        public QrItemViewHolder(@NonNull View itemView)
+        QrItemViewHolder(@NonNull View itemView)
         {
             super(itemView);
             btnChangeQuantitiy = itemView.findViewById(R.id.btnChangeQuantity);
@@ -90,7 +90,7 @@ public class QrCodeItemsAdapter extends RecyclerView.Adapter<QrCodeItemsAdapter.
         }
     }
 
-    public void setList(List<Artikel> artikel)
+    void setList(List<Artikel> artikel)
     {
         this.artikel = artikel;
     }

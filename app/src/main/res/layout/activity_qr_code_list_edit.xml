@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQrEditId">
+        app:layout_constraintTop_toBottomOf="@+id/tvQrEditId"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/ivOccupied"
@@ -24,14 +25,15 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_check_green_24dp"
             tools:layout_editor_absoluteX="147dp"
-            tools:layout_editor_absoluteY="186dp" />
+            tools:layout_editor_absoluteY="186dp"
+            android:contentDescription="@string/todo" />
 
         <TextView
             android:id="@+id/tvOccupied"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:text="Belegt"
+            android:text="@string/occupied"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="@+id/ivOccupied"
             app:layout_constraintStart_toEndOf="@+id/ivOccupied"
@@ -84,6 +86,7 @@
         android:layout_marginEnd="16dp"
         android:onClick="addQrArtikel"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_black_48dp" />
@@ -95,7 +98,7 @@
         android:onClick="onFertig"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
-        android:text="@string/fertig"
+        android:text="@string/finished"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

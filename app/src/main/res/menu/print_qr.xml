@@ -5,6 +5,6 @@
     <item
         android:id="@+id/print"
         android:icon="@drawable/ic_print_black_24dp"
-        android:title="@string/drucken"
+        android:title="@string/print"
         app:showAsAction="always" />
 </menu>

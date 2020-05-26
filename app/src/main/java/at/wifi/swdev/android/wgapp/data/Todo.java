@@ -1,5 +1,7 @@
 package at.wifi.swdev.android.wgapp.data;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Todo implements Serializable
@@ -59,6 +61,7 @@ public class Todo implements Serializable
         this.id = id;
     }
 
+    @NonNull
     @Override
     public String toString()
     {

@@ -25,9 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
+import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeScannerBinding;
 
@@ -150,7 +153,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
                 FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
                 {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
+                    public void onDataChange(@NotNull DataSnapshot dataSnapshot)
                     {
                         if (dataSnapshot.exists())
                         {
@@ -169,7 +172,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
                                     startActivityForResult(new Intent(context, QrCodeItemsActivity.class).putExtra(ARTIKEL_EXTRA, qrArtikel), REQUEST_CODE_QR_ITEMS);
                                 }
                             }
-                            binding.tvInfo.setText("Diesen QR-Code gibt es nicht. Versuchen sie es erneut!");
+                            binding.tvInfo.setText(R.string.thisQrIsNotInDatabase);
                         }
                     }
 
@@ -191,6 +194,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
                 //Permission granted
+                binding.svCameraView.invalidate();
                 startQRCodeDetection();
             } else
             {

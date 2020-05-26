@@ -21,10 +21,10 @@ import at.wifi.swdev.android.wgapp.onListItemClickListener;
 
 public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, ShoppingListAdapter.ShoppingViewHolder>
 {
-    private onListItemClickListener listItemClickListener;
+    private onListItemClickListener<Artikel> listItemClickListener;
     private Context context;
 
-    public ShoppingListAdapter(@NonNull FirebaseRecyclerOptions<Artikel> options)
+    ShoppingListAdapter(@NonNull FirebaseRecyclerOptions<Artikel> options)
     {
         super(options);
     }
@@ -33,7 +33,7 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
     protected void onBindViewHolder(@NonNull ShoppingViewHolder holder, int position, @NonNull final Artikel model)
     {
         holder.titleTV.setText(model.getTitle());
-        holder.amountTV.setText("" + model.getQuantity());
+        holder.amountTV.setText(String.valueOf(model.getQuantity()));
         holder.doneIV.setVisibility(model.isDone() ? View.VISIBLE : View.INVISIBLE);
 
         holder.infoIV.setOnClickListener(new View.OnClickListener()
@@ -81,7 +81,7 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
         return new ShoppingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_shoppinglist_item, parent, false));
     }
 
-    class ShoppingViewHolder extends RecyclerView.ViewHolder
+    static class ShoppingViewHolder extends RecyclerView.ViewHolder
     {
         private final ImageView doneIV;
         private final TextView amountTV;
@@ -89,9 +89,8 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
         private final ImageView infoIV;
         private final ImageView editIV;
         private final ImageView deleteIV;
-        private final View divider;
 
-        public ShoppingViewHolder(@NonNull View itemView)
+        ShoppingViewHolder(@NonNull View itemView)
         {
             super(itemView);
             doneIV = itemView.findViewById(R.id.ivDoneToDo);
@@ -100,11 +99,10 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
             infoIV = itemView.findViewById(R.id.ivInfoQr);
             editIV = itemView.findViewById(R.id.ivEditQr);
             deleteIV = itemView.findViewById(R.id.ivDeleteQr);
-            divider = itemView.findViewById(R.id.dividerToDo);
         }
     }
 
-    public void setOnClickListener(onListItemClickListener listener)
+    public void setOnClickListener(onListItemClickListener<Artikel> listener)
     {
         listItemClickListener = listener;
     }

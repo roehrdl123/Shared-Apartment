@@ -1,5 +1,7 @@
 package at.wifi.swdev.android.wgapp.data;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 public class Artikel implements Serializable
@@ -71,6 +73,7 @@ public class Artikel implements Serializable
         this.done = done;
     }
 
+    @NotNull
     @Override
     public String toString()
     {

@@ -1,5 +1,6 @@
 package at.wifi.swdev.android.wgapp.calendar;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -9,14 +10,14 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import androidx.appcompat.app.AppCompatActivity;
 import at.wifi.swdev.android.wgapp.databinding.ActivityCalendarAddBinding;
 
 
@@ -32,7 +33,9 @@ public class CalendarAddActivity extends AppCompatActivity implements DatePicker
     private boolean timeClickStart; //IF true - start, if false - end
     private boolean dateClickStart; //IF true - start, if false - end
     final Calendar c = Calendar.getInstance();
+    @SuppressLint("SimpleDateFormat")
     private SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
+    @SuppressLint("SimpleDateFormat")
     private SimpleDateFormat formatDate = new SimpleDateFormat("dd.MM.yyyy");
 
     @Override
@@ -70,6 +73,7 @@ public class CalendarAddActivity extends AppCompatActivity implements DatePicker
                 cal.setDateEnd(end);
 
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(startCal.get(Calendar.YEAR))).child(String.valueOf(startCal.get(Calendar.WEEK_OF_YEAR)));
+
                 String key = ref.push().getKey();
 
                 cal.setId(key);
@@ -98,9 +102,7 @@ public class CalendarAddActivity extends AppCompatActivity implements DatePicker
             return false;
         if (!endCal.isSet(Calendar.MONTH))
             return false;
-        if (!endCal.isSet(Calendar.HOUR_OF_DAY))
-            return false;
-        return true;
+        return endCal.isSet(Calendar.HOUR_OF_DAY);
     }
 
     private void setListeners()

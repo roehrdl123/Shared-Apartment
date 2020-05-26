@@ -14,7 +14,6 @@ import at.wifi.swdev.android.wgapp.databinding.ActivityCustomTodoListBinding;
 public class CustomTodoListActivity extends AppCompatActivity
 {
     public static final String EXTRA_ID = "item";
-    public static final String EXTRA_TEMPLATE_ID = "template";
     private ActivityCustomTodoListBinding binding;
 
     @Override

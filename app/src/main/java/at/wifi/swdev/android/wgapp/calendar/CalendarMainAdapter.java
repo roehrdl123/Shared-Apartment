@@ -1,26 +1,30 @@
 package at.wifi.swdev.android.wgapp.calendar;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Calendar;
+import at.wifi.swdev.android.wgapp.onListItemClickListener;
 
 public class CalendarMainAdapter extends FirebaseRecyclerAdapter<Calendar, CalendarMainAdapter.CalendarViewHolder>
 {
+    @SuppressLint("SimpleDateFormat")
     private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy - HH:mm");
+    private onListItemClickListener<Calendar> clickListener;
 
-    public CalendarMainAdapter(@NonNull FirebaseRecyclerOptions<Calendar> options)
+    CalendarMainAdapter(FirebaseRecyclerOptions<Calendar> options)
     {
         super(options);
     }
@@ -32,26 +36,38 @@ public class CalendarMainAdapter extends FirebaseRecyclerAdapter<Calendar, Calen
         return new CalendarViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_calendar_list_item, parent, false));
     }
     @Override
-    protected void onBindViewHolder(@NonNull CalendarViewHolder holder, int position, @NonNull Calendar entry)
+    protected void onBindViewHolder(@NonNull CalendarViewHolder holder, int position, @NonNull final Calendar entry)
     {
 
         holder.startDateTV.setText(format.format(entry.getDateStart()));
         holder.endDateTV.setText(format.format(entry.getDateEnd()));
         holder.titleTV.setText(entry.getTitle());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                clickListener.onListItemClick(entry, 1);
+            }
+        });
     }
 
-    class CalendarViewHolder extends RecyclerView.ViewHolder
+    static class CalendarViewHolder extends RecyclerView.ViewHolder
     {
-        public TextView endDateTV;
-        public TextView startDateTV;
-        public TextView titleTV;
+        private TextView endDateTV;
+        private TextView startDateTV;
+        private TextView titleTV;
 
-        public CalendarViewHolder(@NonNull View itemView)
+        CalendarViewHolder(@NonNull View itemView)
         {
             super(itemView);
             endDateTV = itemView.findViewById(R.id.tvEndDate);
             startDateTV = itemView.findViewById(R.id.tvStartDate);
             titleTV = itemView.findViewById(R.id.tvTitelCal);
         }
+    }
+
+    void setClickListener(onListItemClickListener<Calendar> clickListener)
+    {
+        this.clickListener = clickListener;
     }
 }

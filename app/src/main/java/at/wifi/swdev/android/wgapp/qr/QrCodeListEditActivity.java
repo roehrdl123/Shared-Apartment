@@ -1,23 +1,14 @@
 package at.wifi.swdev.android.wgapp.qr;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import at.wifi.swdev.android.wgapp.R;
-import at.wifi.swdev.android.wgapp.data.Artikel;
-import at.wifi.swdev.android.wgapp.data.QRItems;
-import at.wifi.swdev.android.wgapp.data.Todo;
-import at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeListEditBinding;
-import at.wifi.swdev.android.wgapp.onListItemClickListener;
-import at.wifi.swdev.android.wgapp.shoppinglist.CustomShoppingListActivity;
-import at.wifi.swdev.android.wgapp.todolist.ToDoListAdapter;
-
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -27,21 +18,26 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import at.wifi.swdev.android.wgapp.R;
+import at.wifi.swdev.android.wgapp.data.Artikel;
+import at.wifi.swdev.android.wgapp.data.QRItems;
+import at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeListEditBinding;
+import at.wifi.swdev.android.wgapp.onListItemClickListener;
+import at.wifi.swdev.android.wgapp.shoppinglist.CustomShoppingListActivity;
+
 public class QrCodeListEditActivity extends AppCompatActivity implements onListItemClickListener<Artikel>
 {
-    private ActivityQrCodeListEditBinding binding;
     public static final int RQ_CODE_EDIT = 1;
     public static final int REQUEST_CODE_NEW_QR_ITEM = 1234;
     public static final String EXTRA_INC = "incRQ";
     public static final String EXTRA_INC_MODEL = "incRQModel";
     private QRItems qrItem;
-    private boolean editable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        binding = ActivityQrCodeListEditBinding.inflate(getLayoutInflater());
+        at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeListEditBinding binding = ActivityQrCodeListEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
 
@@ -52,8 +48,7 @@ public class QrCodeListEditActivity extends AppCompatActivity implements onListI
 
 
         binding.tvEdit.setText(R.string.edit);
-        getSupportActionBar().setTitle("QrCode editieren");
-        editable = true;
+        getSupportActionBar().setTitle(R.string.editQr);
 
         Query artikelQuery = FirebaseDatabase.getInstance().getReference("qrcodes").child(qrItem.getKey()).child("items");
 
@@ -61,7 +56,6 @@ public class QrCodeListEditActivity extends AppCompatActivity implements onListI
 
         QrCodeListEditAdapter adapter = new QrCodeListEditAdapter(options);
         adapter.setOnListItemClickListener(this);
-        adapter.setEditable(editable);
         adapter.setOnListItemClickListener(this);
 
         binding.rvQrItems.setLayoutManager(new LinearLayoutManager(this));

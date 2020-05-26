@@ -7,22 +7,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
-import at.wifi.swdev.android.wgapp.data.QRItems;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
 
 public class QrCodeListEditAdapter extends FirebaseRecyclerAdapter<Artikel, QrCodeListEditAdapter.EditViewHolder>
 {
-    private boolean editable;
     private onListItemClickListener<Artikel> listener;
 
-    public QrCodeListEditAdapter(@NonNull FirebaseRecyclerOptions<Artikel> options)
+    QrCodeListEditAdapter(@NonNull FirebaseRecyclerOptions<Artikel> options)
     {
         super(options);
     }
@@ -51,14 +50,14 @@ public class QrCodeListEditAdapter extends FirebaseRecyclerAdapter<Artikel, QrCo
         return new EditViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_qr_edit_item, parent, false));
     }
 
-    class EditViewHolder extends RecyclerView.ViewHolder
+    static class EditViewHolder extends RecyclerView.ViewHolder
     {
-        public ImageView ivDelete;
-        public TextView tvTitle;
-        public TextView tvContent;
-        public TextView tvQuantity;
+        private ImageView ivDelete;
+        private TextView tvTitle;
+        private TextView tvContent;
+        private TextView tvQuantity;
 
-        public EditViewHolder(@NonNull View itemView)
+        EditViewHolder(@NonNull View itemView)
         {
             super(itemView);
             ivDelete = itemView.findViewById(R.id.ivDelete);
@@ -66,11 +65,6 @@ public class QrCodeListEditAdapter extends FirebaseRecyclerAdapter<Artikel, QrCo
             tvContent = itemView.findViewById(R.id.tvContent);
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
         }
-    }
-
-    public void setEditable(boolean editable)
-    {
-        this.editable = editable;
     }
 
     public void setOnListItemClickListener(onListItemClickListener<Artikel> onListItemClickListener)

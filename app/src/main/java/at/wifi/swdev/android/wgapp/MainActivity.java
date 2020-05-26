@@ -3,16 +3,19 @@ package at.wifi.swdev.android.wgapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
@@ -24,16 +27,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Arrays;
 import java.util.List;
 
-import at.wifi.swdev.android.wgapp.calendar.CalendarMainActivity;
 import at.wifi.swdev.android.wgapp.data.User;
 import at.wifi.swdev.android.wgapp.databinding.ActivityMainBinding;
-import at.wifi.swdev.android.wgapp.shoppinglist.ShoppingListFragment;
-import at.wifi.swdev.android.wgapp.todolist.TodoListMainActivity;
 
 public class MainActivity extends AppCompatActivity
 {
     public static final int RC_SIGN_IN = 12357;
-    private List<AuthUI.IdpConfig> providers;
     private ActivityMainBinding binding;
     private static String TAG = MainActivity.class.getSimpleName();
 
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity
         if (user == null)
         {
             //Der Benutzer ist nicht angemeldet
-            providers = Arrays.asList(
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
                     new AuthUI.IdpConfig.EmailBuilder().build(),
                     new AuthUI.IdpConfig.PhoneBuilder().build(),
                     new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -61,18 +60,10 @@ public class MainActivity extends AppCompatActivity
                             .setAvailableProviders(providers)
                             .build(), RC_SIGN_IN);
         }
-    }
-
-    public void onShoppingList(View view)
-    {
-        Intent intent = new Intent(this, ShoppingListFragment.class);
-        startActivity(intent);
-    }
-
-    public void onOpenTodo(View view)
-    {
-        Intent intent = new Intent(this, TodoListMainActivity.class);
-        startActivity(intent);
+        else
+        {
+            showNavigationBar();
+        }
     }
 
     @Override
@@ -83,7 +74,7 @@ public class MainActivity extends AppCompatActivity
 
         if (requestCode == RC_SIGN_IN)
         {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
+//            IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK)
             {
@@ -99,9 +90,9 @@ public class MainActivity extends AppCompatActivity
                     {
                         if (task.isSuccessful())
                         {
+                            showNavigationBar();
                             Log.d(TAG, "onComplete: USER created");
-                        }
-                        else
+                        } else
                         {
                             Log.e(TAG, "onComplete: USER failed");
                         }
@@ -111,22 +102,26 @@ public class MainActivity extends AppCompatActivity
             else
             {
                 //Anmeldung nicht erfolgreich
-                binding.button.setClickable(false);
-                binding.button2.setClickable(false);
                 Snackbar.make(binding.getRoot(), "Fehler bei der Anmeldung", BaseTransientBottomBar.LENGTH_LONG).show();
-                Log.d(TAG, "Failed to sign in: " + response.getError());
+                Log.d(TAG, "Failed to sign in:" );//+ response.getError());
             }
         }
     }
 
-    public void onOpenCalendar(View view)
+    private void showNavigationBar()
     {
-        Intent intent = new Intent(this, CalendarMainActivity.class);
-        startActivity(intent);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_todo, R.id.nav_shoppinglist, R.id.nav_cal).build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
     }
     /*
-    TODO: 1. Kalender
-    TODO: 3. Fragments (Kalender, TodoList und ShoppingList Mains) das andere bleiben Activities
-    TODO: 4. Design
+    TODO: 1. Kalender einträge editieren / löschen
+    TODO: 2. Einstellen ob man auf knopfdruck lieber den Tag oder die Woche sehen will??
+    TODO: 3. Design
     */
+
 }

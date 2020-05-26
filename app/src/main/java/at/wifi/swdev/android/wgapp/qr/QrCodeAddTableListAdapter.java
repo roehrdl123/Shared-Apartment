@@ -5,17 +5,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 
 public class QrCodeAddTableListAdapter extends FirebaseRecyclerAdapter<Artikel, QrCodeAddTableListAdapter.QrTableViewHolder>
 {
-    public QrCodeAddTableListAdapter(@NonNull FirebaseRecyclerOptions<Artikel> options)
+    QrCodeAddTableListAdapter(@NonNull FirebaseRecyclerOptions<Artikel> options)
     {
         super(options);
     }
@@ -25,7 +26,7 @@ public class QrCodeAddTableListAdapter extends FirebaseRecyclerAdapter<Artikel, 
     {
         holder.tvTitle.setText(model.getTitle());
         holder.tvContent.setText(model.getContent());
-        holder.tvQuantity.setText(model.getQuantity()+"");
+        holder.tvQuantity.setText(String.valueOf(model.getQuantity()));
     }
 
     @NonNull
@@ -35,12 +36,12 @@ public class QrCodeAddTableListAdapter extends FirebaseRecyclerAdapter<Artikel, 
         return new QrTableViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_qr_table_add_items, parent, false));
     }
 
-    class QrTableViewHolder extends RecyclerView.ViewHolder
+    static class QrTableViewHolder extends RecyclerView.ViewHolder
     {
         private TextView tvTitle;
         private TextView tvContent;
         private TextView tvQuantity;
-        public QrTableViewHolder(@NonNull View itemView)
+        QrTableViewHolder(@NonNull View itemView)
         {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitleQrArticle);

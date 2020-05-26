@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:text="@string/tv_Titel"
+            android:text="@string/title"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
@@ -57,8 +57,9 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/tv_Titel"
-            android:inputType="textPersonName" />
+            android:hint="@string/title"
+            android:inputType="textPersonName"
+            android:autofillHints="" />
 
     </LinearLayout>
 
@@ -93,7 +94,8 @@
             android:inputType="text|textImeMultiLine"
             android:maxLines="4"
             android:singleLine="false"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:autofillHints="" />
 
     </LinearLayout>
 
@@ -119,7 +121,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvEndDate"
-            app:layout_constraintTop_toBottomOf="@+id/textView22" />
+            app:layout_constraintTop_toBottomOf="@+id/textView22"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/etEndTime"
@@ -132,13 +136,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvEndTime"
-            app:layout_constraintTop_toBottomOf="@+id/etEndDate" />
+            app:layout_constraintTop_toBottomOf="@+id/etEndDate"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
 
         <TextView
             android:id="@+id/tvEndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Datum"
+            android:text="@string/datum"
             app:layout_constraintBottom_toBottomOf="@+id/etEndDate"
             app:layout_constraintEnd_toStartOf="@+id/etEndDate"
             app:layout_constraintHorizontal_bias="0.5"
@@ -149,7 +155,7 @@
             android:id="@+id/tvEndTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Uhrzeit"
+            android:text="@string/time"
             app:layout_constraintBottom_toBottomOf="@+id/etEndTime"
             app:layout_constraintEnd_toStartOf="@+id/etEndTime"
             app:layout_constraintHorizontal_bias="0.5"
@@ -160,7 +166,7 @@
             android:id="@+id/textView22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ende"
+            android:text="@string/end"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -187,7 +193,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tv321312"
-            app:layout_constraintTop_toBottomOf="@+id/textView20" />
+            app:layout_constraintTop_toBottomOf="@+id/textView20"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/etStartTime"
@@ -200,13 +208,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvStartTime"
-            app:layout_constraintTop_toBottomOf="@+id/etStartDate" />
+            app:layout_constraintTop_toBottomOf="@+id/etStartDate"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
         <TextView
             android:id="@+id/tv321312"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Datum"
+            android:text="@string/datum"
             app:layout_constraintBottom_toBottomOf="@+id/etStartDate"
             app:layout_constraintEnd_toStartOf="@+id/etStartDate"
             app:layout_constraintHorizontal_bias="0.5"
@@ -217,7 +227,7 @@
             android:id="@+id/tvStartTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Uhrzeit"
+            android:text="@string/time"
             app:layout_constraintBottom_toBottomOf="@+id/etStartTime"
             app:layout_constraintEnd_toStartOf="@+id/etStartTime"
             app:layout_constraintHorizontal_bias="0.5"
@@ -228,7 +238,7 @@
             android:id="@+id/textView20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start"
+            android:text="@string/start"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

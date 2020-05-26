@@ -44,7 +44,7 @@ public class QrCodeListActivity extends AppCompatActivity implements onListItemC
         binding = ActivityQrCodeListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().setTitle(R.string.qrcodeActionBar);
+        getSupportActionBar().setTitle(R.string.qrCodeActionBar);
 
         findQr();
     }
@@ -98,7 +98,7 @@ public class QrCodeListActivity extends AppCompatActivity implements onListItemC
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                     {
-                        Map<Integer, QRItems> allQrsMap = new HashMap();
+                        Map<Integer, QRItems> allQrsMap = new HashMap<>();
                         for (StorageReference item : listResult.getItems())
                         {
                             int id = Integer.parseInt(item.getName().split("\\.")[0]);
@@ -153,7 +153,6 @@ public class QrCodeListActivity extends AppCompatActivity implements onListItemC
                     {
                         HashSet<Integer> setData = new HashSet<>();
                         HashSet<Integer> setPics = new HashSet<>();
-                        Map<Integer, StorageReference> map = new HashMap<>();
                         for (DataSnapshot data : dataSnapshot.getChildren())
                         {
                             QRItems qrItem = data.getValue(QRItems.class);
@@ -163,7 +162,6 @@ public class QrCodeListActivity extends AppCompatActivity implements onListItemC
                         {
                             int id = Integer.parseInt(item.getName().split("\\.")[0]);
                             setPics.add(id);
-                            map.put(id, item);
                         }
 
                         setPics.removeAll(setData);

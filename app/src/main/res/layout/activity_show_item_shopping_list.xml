@@ -23,7 +23,7 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Erledigt"
+        android:text="@string/done"
         app:layout_constraintBottom_toBottomOf="@+id/swDone"
         app:layout_constraintEnd_toStartOf="@+id/swDone"
         app:layout_constraintHorizontal_bias="0.5"
@@ -34,7 +34,7 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_Titel"
+        android:text="@string/title"
         app:layout_constraintBottom_toBottomOf="@+id/etTitle"
         app:layout_constraintEnd_toStartOf="@+id/etTitle"
         app:layout_constraintHorizontal_bias="0.5"
@@ -46,19 +46,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/tv_Titel"
+        android:hint="@string/title"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/etContent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView12"
-        app:layout_constraintTop_toBottomOf="@+id/etAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/etAmount"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_bezeichnung"
+        android:text="@string/tv_content"
         app:layout_constraintBottom_toBottomOf="@+id/etContent"
         app:layout_constraintEnd_toStartOf="@+id/etContent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -70,20 +71,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/tv_bezeichnung"
+        android:hint="@string/tv_content"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/button8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/etTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/etTitle"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="@string/tv_anzahl"
+        android:text="@string/quantity"
         app:layout_constraintBottom_toBottomOf="@+id/etAmount"
         app:layout_constraintEnd_toStartOf="@+id/etAmount"
         app:layout_constraintHorizontal_bias="0.5"
@@ -106,13 +108,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:ems="10"
-        android:hint="@string/tv_anzahl"
+        android:hint="@string/quantity"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/etTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/swDone" />
+        app:layout_constraintTop_toBottomOf="@+id/swDone"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/button8"

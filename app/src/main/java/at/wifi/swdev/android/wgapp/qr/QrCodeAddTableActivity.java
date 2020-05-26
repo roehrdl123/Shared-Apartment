@@ -1,18 +1,5 @@
 package at.wifi.swdev.android.wgapp.qr;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.print.PrintHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import at.wifi.swdev.android.wgapp.R;
-import at.wifi.swdev.android.wgapp.data.Artikel;
-import at.wifi.swdev.android.wgapp.data.QRItems;
-import at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeListBinding;
-import at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeTableAddBinding;
-import at.wifi.swdev.android.wgapp.shoppinglist.CustomShoppingListActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.print.PrintHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,14 +34,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import at.wifi.swdev.android.wgapp.R;
+import at.wifi.swdev.android.wgapp.data.Artikel;
+import at.wifi.swdev.android.wgapp.data.QRItems;
+import at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeTableAddBinding;
+import at.wifi.swdev.android.wgapp.shoppinglist.CustomShoppingListActivity;
+
 public class QrCodeAddTableActivity extends AppCompatActivity
 {
     public static final int REQUEST_CODE_NEW_QR_ITEM = 1234;
     private ActivityQrCodeTableAddBinding binding;
     private static final String TAG = QrCodeAddTableActivity.class.getSimpleName();
     private QRItems qr;
-    private QrCodeAddTableListAdapter adapter;
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,7 +54,7 @@ public class QrCodeAddTableActivity extends AppCompatActivity
         binding = ActivityQrCodeTableAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().setTitle("Neuer QrCode");
+        getSupportActionBar().setTitle(R.string.newQr);
 
         findQr();
     }
@@ -147,9 +144,8 @@ public class QrCodeAddTableActivity extends AppCompatActivity
 
         if (qr != null)
         {
-            binding.tvIdQrList.setText(getString(R.string.id) + qr.getQrId());
-
-            recyclerView = binding.rvTable;
+            String string = getString(R.string.id) + qr.getQrId();
+            binding.tvIdQrList.setText(string);
 
             String key = FirebaseDatabase.getInstance().getReference("qrcodes").push().getKey();
             qr.setKey(key);
@@ -158,7 +154,7 @@ public class QrCodeAddTableActivity extends AppCompatActivity
 
             FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(QrCodeAddTableActivity.this).setQuery(qrcodeQuery, Artikel.class).build();
 
-            adapter = new QrCodeAddTableListAdapter(options);
+            QrCodeAddTableListAdapter adapter = new QrCodeAddTableListAdapter(options);
             binding.rvTable.setLayoutManager(new LinearLayoutManager(QrCodeAddTableActivity.this));
             binding.rvTable.setAdapter(adapter);
         }
@@ -237,14 +233,12 @@ public class QrCodeAddTableActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     {
-        switch (item.getItemId())
+        if (item.getItemId() == R.id.print)
         {
-            case R.id.print:
-                printQr();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            printQr();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void printQr()

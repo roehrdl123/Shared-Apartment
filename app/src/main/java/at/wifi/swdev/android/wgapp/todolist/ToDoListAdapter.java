@@ -17,15 +17,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Todo;
-import at.wifi.swdev.android.wgapp.onListItemClickListener;
 import at.wifi.swdev.android.wgapp.shoppinglist.ShowItemShoppingListActivity;
 
 public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapter.TodoViewHolder>
 {
-    private onListItemClickListener onListItemClickListener;
+    private at.wifi.swdev.android.wgapp.onListItemClickListener<Todo> onListItemClickListener;
     private Context context;
 
-    public ToDoListAdapter(@NonNull FirebaseRecyclerOptions<Todo> options)
+    ToDoListAdapter(@NonNull FirebaseRecyclerOptions<Todo> options)
     {
         super(options);
     }
@@ -75,16 +74,15 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
         return new TodoViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_todolist_item, parent, false));
     }
 
-    class TodoViewHolder extends RecyclerView.ViewHolder
+    static class TodoViewHolder extends RecyclerView.ViewHolder
     {
         private ImageView doneTodoIV;
         private ImageView editTodoTV;
         private ImageView infoTodoTV;
         private ImageView deleteTodoTV;
         private TextView titleTodoTV;
-        private View dividerTodo;
 
-        public TodoViewHolder(@NonNull View itemView)
+        TodoViewHolder(@NonNull View itemView)
         {
             super(itemView);
             doneTodoIV = itemView.findViewById(R.id.ivDoneToDo);
@@ -92,11 +90,10 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
             infoTodoTV = itemView.findViewById(R.id.ivInfoQr);
             deleteTodoTV = itemView.findViewById(R.id.ivDeleteQr);
             titleTodoTV = itemView.findViewById(R.id.tvTitleToDo);
-            dividerTodo = itemView.findViewById(R.id.dividerToDo);
         }
     }
 
-    public void setOnListItemClickListener(onListItemClickListener onListItemClickListener) {
+    public void setOnListItemClickListener(at.wifi.swdev.android.wgapp.onListItemClickListener<Todo> onListItemClickListener) {
         this.onListItemClickListener = onListItemClickListener;
     }
 

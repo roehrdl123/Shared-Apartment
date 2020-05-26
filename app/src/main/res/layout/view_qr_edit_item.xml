@@ -24,13 +24,13 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView15"
         app:layout_constraintTop_toTopOf="@+id/textView18"
-        tools:text="@string/tv_Titel" />
+        tools:text="@string/title" />
 
     <TextView
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_anzahl"
+        android:text="@string/quantity"
         app:layout_constraintBottom_toBottomOf="@+id/tvQuantity"
         app:layout_constraintEnd_toStartOf="@+id/tvQuantity"
         app:layout_constraintHorizontal_bias="0.5"
@@ -71,13 +71,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView21"
         app:layout_constraintTop_toTopOf="@+id/textView21"
-        tools:text="@string/tv_bezeichnung" />
+        tools:text="@string/tv_content" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_Titel"
+        android:text="@string/title"
         app:layout_constraintBottom_toBottomOf="@+id/tvTitel"
         app:layout_constraintEnd_toStartOf="@+id/tvTitel"
         app:layout_constraintHorizontal_bias="0.5"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="at.wifi.swdev.android.wgapp">
 
     <application
@@ -9,51 +10,50 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<!--        <activity-->
-<!--            android:name=".MainActivityBN"-->
-<!--            android:label="@string/title_activity_main_b_n"/>-->
-        <activity android:name=".calendar.CalendarAddActivity" />
-        <activity android:name=".calendar.CalendarMainActivity" />
-        <activity
-            android:name=".qr.QrCodeListEditActivity"
-            android:parentActivityName=".qr.QrCodeListActivity" />
-        <activity
-            android:name=".todolist.ShowItemTodoListActivity"
-            android:parentActivityName=".todolist.TodoListMainActivity" />
-        <activity
-            android:name=".qr.QrCodeListActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
-        <activity
-            android:name=".qr.QrCodeAddTableActivity"
-            android:parentActivityName=".shoppinglist.QrCodeItemsActivity" />
-        <activity
-            android:name=".shoppinglist.ShowItemShoppingListActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
-        <activity
-            android:name=".todolist.CustomTodoListActivity"
-            android:parentActivityName=".todolist.TodoListMainActivity" />
-        <activity android:name=".todolist.TodoListMainActivity" />
-        <activity
-            android:name=".shoppinglist.CustomShoppingListActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
-        <activity
-            android:name=".shoppinglist.QrCodeItemsActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
-        <activity
-            android:name=".shoppinglist.QrCodeScannerActivity"
-            android:parentActivityName=".shoppinglist.ShoppingListFragment" />
-        <activity
-            android:name=".shoppinglist.ShoppingListFragment"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivityBN">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".calendar.CalendarAddActivity" />
+        <activity android:name=".calendar.CalendarMainFragment" />
+        <activity android:name=".todolist.TodoListMainFragment" />
+
+        <activity
+            android:name=".qr.QrCodeListEditActivity"
+            android:parentActivityName=".qr.QrCodeListActivity" />
+        <activity
+            android:name=".todolist.ShowItemTodoListActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".qr.QrCodeListActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".qr.QrCodeAddTableActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".shoppinglist.ShowItemShoppingListActivity"
+            android:parentActivityName="MainActivity" />
+        <activity
+            android:name=".todolist.CustomTodoListActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".shoppinglist.CustomShoppingListActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".shoppinglist.QrCodeItemsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".shoppinglist.QrCodeScannerActivity"
+            android:parentActivityName="MainActivity" />
+
     </application>
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
+
+    <uses-permission android:name="android.permission.READ_CALENDAR"
+        tools:ignore="ManifestOrder" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.CAMERA" />
 
