@@ -56,6 +56,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
     private View root;
     private CalendarView calendarView;
     private Calendar currDate = Calendar.getInstance();
+    private Calendar helperCal = Calendar.getInstance();
 
 
     @Nullable
@@ -200,7 +201,6 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
                     });
                 }
                 calendarView.setEvents(events);
-
             }
 
             @Override
@@ -216,7 +216,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
         calendarView.setOnDayClickListener(new OnDayClickListener()
         {
             @Override
-            public void onDayClick(EventDay eventDay)
+            public void onDayClick(@NonNull EventDay eventDay)
             {
                 Calendar cal = eventDay.getCalendar();
 
@@ -320,7 +320,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
             }
             else
             {
-                Toast.makeText(getContext(), "Ohne Berechtigung kann das Programm möglicherweise nicht richtig funktionieren.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.no_permission_cal, Toast.LENGTH_SHORT).show();
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -363,6 +363,17 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
     @Override
     public void onListItemClick(at.wifi.swdev.android.wgapp.data.Calendar model, int requestCode)
     {
-
+        if( requestCode == 0)
+        {
+            Intent intent = new Intent(getContext(), CalendarEditActivity.class);
+            intent.putExtra(CalendarEditActivity.CAL_EXTRA, model);
+            startActivity(intent);
+        }
+        else if(requestCode == 1)
+        {
+            helperCal.setTimeInMillis(model.getDateStart());
+            FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(helperCal.get(java.util.Calendar.YEAR))).child(String.valueOf(helperCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(model.getId()).removeValue();
+            Toast.makeText(getContext(), R.string.remove_cal, Toast.LENGTH_SHORT).show();
+        }
     }
 }

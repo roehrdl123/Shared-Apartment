@@ -43,4 +43,10 @@
     <string name="time">Uhrzeit</string>
     <string name="template">Vorlage</string>
     <string name="week_number">Kalenderwoche: </string>
+    <string name="editcal">Ändern des Eintrags</string>
+    <string name="error">Ein Fehler ist passiert!</string>
+    <string name="end_bigger_start">Das End-Datum muss nach dem Anfangsdatum sein!</string>
+    <string name="fill_all">Bitte alle Felder ausfüllen</string>
+    <string name="remove_cal">Der Eintrag wurde gelöscht!</string>
+    <string name="no_permission_cal">Ohne Berechtigung kann das Programm möglicherweise nicht richtig funktionieren.</string>
 </resources>

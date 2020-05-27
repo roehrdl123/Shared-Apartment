@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,7 +47,18 @@ public class CalendarMainAdapter extends FirebaseRecyclerAdapter<Calendar, Calen
             @Override
             public void onClick(View v)
             {
-                clickListener.onListItemClick(entry, 1);
+                clickListener.onListItemClick(entry, 0);
+            }
+        });
+
+        final java.util.Calendar entryDate = java.util.Calendar.getInstance();
+        entryDate.setTimeInMillis(entry.getDateStart());
+
+        holder.deleteIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                clickListener.onListItemClick(entry,1);
             }
         });
     }
@@ -56,6 +68,7 @@ public class CalendarMainAdapter extends FirebaseRecyclerAdapter<Calendar, Calen
         private TextView endDateTV;
         private TextView startDateTV;
         private TextView titleTV;
+        private ImageView deleteIV;
 
         CalendarViewHolder(@NonNull View itemView)
         {
@@ -63,6 +76,7 @@ public class CalendarMainAdapter extends FirebaseRecyclerAdapter<Calendar, Calen
             endDateTV = itemView.findViewById(R.id.tvEndDate);
             startDateTV = itemView.findViewById(R.id.tvStartDate);
             titleTV = itemView.findViewById(R.id.tvTitelCal);
+            deleteIV = itemView.findViewById(R.id.ivDeleteEvent);
         }
     }
 

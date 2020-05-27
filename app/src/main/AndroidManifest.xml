@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="at.wifi.swdev.android.wgapp">
 
+    <uses-permission
+        android:name="android.permission.READ_CALENDAR"
+        tools:ignore="ManifestOrder" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,11 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".calendar.CalendarAddActivity" />
         <activity android:name=".calendar.CalendarMainFragment" />
         <activity android:name=".todolist.TodoListMainFragment" />
-
         <activity
             android:name=".qr.QrCodeListEditActivity"
             android:parentActivityName=".qr.QrCodeListActivity" />
@@ -36,7 +41,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".shoppinglist.ShowItemShoppingListActivity"
-            android:parentActivityName="MainActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".todolist.CustomTodoListActivity"
             android:parentActivityName=".MainActivity" />
@@ -48,15 +53,11 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".shoppinglist.QrCodeScannerActivity"
-            android:parentActivityName="MainActivity" />
+            android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".calendar.CalendarEditActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
-
-    <uses-permission android:name="android.permission.READ_CALENDAR"
-        tools:ignore="ManifestOrder" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-permission android:name="android.permission.VIBRATE" />
 
 </manifest>
