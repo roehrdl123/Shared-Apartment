@@ -74,9 +74,9 @@
     <View
         android:id="@+id/view"
         android:layout_width="wrap_content"
-        android:layout_height="2dp"
-        android:layout_marginTop="8dp"
-        android:background="#BA5454"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/div"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvContentQrArticle" />

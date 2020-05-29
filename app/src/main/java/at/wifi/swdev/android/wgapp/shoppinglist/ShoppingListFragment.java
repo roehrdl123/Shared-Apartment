@@ -82,7 +82,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface dialog, int id)
             {
@@ -126,7 +126,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
                     dialogAdd.dismiss();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface dialog, int id)
                         {

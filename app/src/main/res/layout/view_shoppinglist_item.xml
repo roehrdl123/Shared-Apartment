@@ -7,27 +7,23 @@
 
     <ImageView
         android:id="@+id/ivDoneToDo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:visibility="invisible"
-        android:background="@drawable/border_solid"
         app:layout_constraintBottom_toBottomOf="@+id/tvAmount"
         app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toStartOf="@+id/tvAmount"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_check_green_24dp"
         tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tvAmount"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:background="@drawable/border_solid"
         android:gravity="center"
         android:minWidth="25dp"
         android:textAlignment="center"
@@ -45,9 +41,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/border_solid"
-        android:gravity="center"
-        android:textAlignment="center"
+        android:gravity="center|left"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/llActions"
         app:layout_constraintEnd_toStartOf="@+id/llActions"
@@ -59,11 +53,9 @@
     <View
         android:id="@+id/dividerToDo"
         android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="#673AB7"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/div"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,10 +64,9 @@
     <LinearLayout
         android:id="@+id/llActions"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/border_solid"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -83,17 +74,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ivInfoQr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_info_blue_24dp" />
-
-        <ImageView
             android:id="@+id/ivEditQr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_weight="1"
@@ -101,9 +84,9 @@
 
         <ImageView
             android:id="@+id/ivDeleteQr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_delete_black_24dp" />
     </LinearLayout>

@@ -34,16 +34,28 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
     {
         holder.titleTV.setText(model.getTitle());
         holder.amountTV.setText(String.valueOf(model.getQuantity()));
-        holder.doneIV.setVisibility(model.isDone() ? View.VISIBLE : View.INVISIBLE);
-
-        holder.infoIV.setOnClickListener(new View.OnClickListener()
+        holder.doneIV.setImageResource(model.isDone() ? R.drawable.ic_check_green_24dp: R.drawable.ic_check_box_outline_blank_black_24dp);
+        if(!model.isDone())
         {
-            @Override
-            public void onClick(View v)
+            holder.doneIV.setOnClickListener(new View.OnClickListener()
             {
-                listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
-            }
-        });
+                @Override
+                public void onClick(View v)
+                {
+                    model.setDone(true);
+                    FirebaseDatabase.getInstance().getReference("shoppinglist").child(model.getId()).setValue(model);
+                }
+            });
+        }
+//
+//        holder.infoIV.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
+//            }
+//        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
@@ -86,7 +98,7 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
         private final ImageView doneIV;
         private final TextView amountTV;
         private final TextView titleTV;
-        private final ImageView infoIV;
+//        private final ImageView infoIV;
         private final ImageView editIV;
         private final ImageView deleteIV;
 
@@ -96,7 +108,7 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
             doneIV = itemView.findViewById(R.id.ivDoneToDo);
             amountTV = itemView.findViewById(R.id.tvAmount);
             titleTV = itemView.findViewById(R.id.tvTitleToDo);
-            infoIV = itemView.findViewById(R.id.ivInfoQr);
+//            infoIV = itemView.findViewById(R.id.ivInfoQr);
             editIV = itemView.findViewById(R.id.ivEditQr);
             deleteIV = itemView.findViewById(R.id.ivDeleteQr);
         }

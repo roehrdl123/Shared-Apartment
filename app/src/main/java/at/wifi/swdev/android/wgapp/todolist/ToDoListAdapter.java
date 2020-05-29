@@ -33,15 +33,20 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
     protected void onBindViewHolder(@NonNull TodoViewHolder holder, int position, @NonNull final Todo model)
     {
         holder.titleTodoTV.setText(model.getTitle());
-        holder.doneTodoIV.setVisibility(model.isDone() ? View.VISIBLE : View.INVISIBLE);
 
-        holder.infoTodoTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
+        holder.doneTodoIV.setImageResource(model.isDone() ? R.drawable.ic_check_green_24dp: R.drawable.ic_check_box_outline_blank_black_24dp);
+        if(!model.isDone())
+        {
+            holder.doneTodoIV.setOnClickListener(new View.OnClickListener()
             {
-                onListItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
-            }
-        });
+                @Override
+                public void onClick(View v)
+                {
+                    model.setDone(true);
+                    FirebaseDatabase.getInstance().getReference("todos").child(model.getId()).setValue(model);
+                }
+            });
+        }
         holder.editTodoTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -78,7 +83,6 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
     {
         private ImageView doneTodoIV;
         private ImageView editTodoTV;
-        private ImageView infoTodoTV;
         private ImageView deleteTodoTV;
         private TextView titleTodoTV;
 
@@ -87,7 +91,6 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
             super(itemView);
             doneTodoIV = itemView.findViewById(R.id.ivDoneToDo);
             editTodoTV = itemView.findViewById(R.id.ivEditQr);
-            infoTodoTV = itemView.findViewById(R.id.ivInfoQr);
             deleteTodoTV = itemView.findViewById(R.id.ivDeleteQr);
             titleTodoTV = itemView.findViewById(R.id.tvTitleToDo);
         }
