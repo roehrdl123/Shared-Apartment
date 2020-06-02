@@ -47,6 +47,8 @@ public class CalendarEditActivity extends AppCompatActivity implements DatePicke
 
         if (cal != null)
         {
+            getSupportActionBar().setTitle(R.string.calendar);
+
             startCal.setTimeInMillis(cal.getDateStart());
             endCal.setTimeInMillis(cal.getDateEnd());
 
@@ -62,8 +64,7 @@ public class CalendarEditActivity extends AppCompatActivity implements DatePicke
             timePickerDialog = new TimePickerDialog(this, this, startCal.get(java.util.Calendar.HOUR_OF_DAY), startCal.get(java.util.Calendar.MINUTE), true);
 
             setListeners();
-        }
-        else
+        } else
         {
             Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
             finish();
@@ -190,5 +191,12 @@ public class CalendarEditActivity extends AppCompatActivity implements DatePicke
             endCal.set(java.util.Calendar.MINUTE, i1);
             binding.etEndTime.setText(formatTime.format(endCal.getTime()));
         }
+    }
+
+    public void onDelete(View view)
+    {
+        FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(startCal.get(java.util.Calendar.YEAR))).child(String.valueOf(startCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(cal.getId()).removeValue();
+        Toast.makeText(this, R.string.remove_cal, Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

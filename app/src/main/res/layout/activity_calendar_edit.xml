@@ -28,43 +28,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
 
-        <TextView
-            android:id="@+id/textView23"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:text="@string/title"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <EditText
-            android:id="@+id/etTitleCal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/title"
-            android:inputType="textPersonName"
-            android:autofillHints="" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -74,30 +40,96 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
-        <TextView
-            android:id="@+id/textView24"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/etTitleCal"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="0"
-            android:text="@string/content" />
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/title"
+            android:inputType="textPersonName"
+            android:autofillHints=""
+            android:ellipsize="end"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/etContent"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:hint="@string/content"
-            android:inputType="text|textImeMultiLine"
             android:maxLines="4"
+            android:autofillHints=""
+            android:layout_marginTop="8dp"
+            android:minLines="1"
+            android:ems="3"
             android:singleLine="false"
+            android:inputType="textMultiLine"
+            android:textSize="@dimen/text_size"
             app:layout_constraintEnd_toEndOf="parent"
-            android:autofillHints="" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etTitleCal" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutStart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/layoutEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl1">
+
+        <EditText
+            android:id="@+id/etStartDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="false"
+            android:inputType="date"
+            android:importantForAutofill="no"
+            android:hint="@string/datum"
+            android:layout_marginTop="8dp"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView20"
+            tools:ignore="LabelFor" />
+
+        <EditText
+            android:id="@+id/etStartTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:focusable="false"
+            android:inputType="time"
+            android:importantForAutofill="no"
+            android:hint="@string/time"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etStartDate"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beginn"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutEnd"
@@ -113,132 +145,42 @@
 
         <EditText
             android:id="@+id/etEndDate"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:focusable="false"
             android:inputType="date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tvEndDate"
-            app:layout_constraintTop_toBottomOf="@+id/textView22"
             android:autofillHints=""
+            android:hint="@string/datum"
+            android:layout_marginTop="8dp"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView22"
             tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/etEndTime"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
             android:focusable="false"
             android:inputType="time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tvEndTime"
-            app:layout_constraintTop_toBottomOf="@+id/etEndDate"
             android:autofillHints=""
+            android:hint="@string/time"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etEndDate"
             tools:ignore="LabelFor" />
-
-        <TextView
-            android:id="@+id/tvEndDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/datum"
-            app:layout_constraintBottom_toBottomOf="@+id/etEndDate"
-            app:layout_constraintEnd_toStartOf="@+id/etEndDate"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/etEndDate" />
-
-        <TextView
-            android:id="@+id/tvEndTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time"
-            app:layout_constraintBottom_toBottomOf="@+id/etEndTime"
-            app:layout_constraintEnd_toStartOf="@+id/etEndTime"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/etEndTime" />
 
         <TextView
             android:id="@+id/textView22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/end"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutStart"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/layoutEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
-
-        <EditText
-            android:id="@+id/etStartDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tvStartDate"
-            app:layout_constraintTop_toBottomOf="@+id/textView20"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor" />
-
-        <EditText
-            android:id="@+id/etStartTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tvStartTime"
-            app:layout_constraintTop_toBottomOf="@+id/etStartDate"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor" />
-
-        <TextView
-            android:id="@+id/tvStartDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/datum"
-            app:layout_constraintBottom_toBottomOf="@+id/etStartDate"
-            app:layout_constraintEnd_toStartOf="@+id/etStartDate"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/etStartDate" />
-
-        <TextView
-            android:id="@+id/tvStartTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time"
-            app:layout_constraintBottom_toBottomOf="@+id/etStartTime"
-            app:layout_constraintEnd_toStartOf="@+id/etStartTime"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/etStartTime" />
-
-        <TextView
-            android:id="@+id/textView20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/start"
+            android:textSize="@dimen/text_size"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -255,4 +197,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:text="@string/delete"
+        android:onClick="onDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button14"
+        app:layout_constraintStart_toEndOf="@+id/button15" />
 </androidx.constraintlayout.widget.ConstraintLayout>

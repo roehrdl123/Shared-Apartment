@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.databinding.ActivityCalendarAddBinding;
 
 
@@ -47,6 +48,8 @@ public class CalendarAddActivity extends AppCompatActivity implements DatePicker
 
         datePickerDialog = new DatePickerDialog(this, this, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         timePickerDialog = new TimePickerDialog(this, this, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+
+        getSupportActionBar().setTitle(R.string.calendar);
 
         endCal.clear();
         startCal.clear();

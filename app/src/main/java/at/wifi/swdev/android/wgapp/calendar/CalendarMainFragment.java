@@ -134,7 +134,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)
         {
 
-            String textHelper = getResources().getString(R.string.week_number) + String.valueOf(currDate.get(Calendar.WEEK_OF_YEAR));
+            String textHelper = getResources().getString(R.string.week_number) + " " + String.valueOf(currDate.get(Calendar.WEEK_OF_YEAR));
             SpannableString underlinedString = new SpannableString(textHelper);
             underlinedString.setSpan(new UnderlineSpan(), 0, underlinedString.length(), 0);
             ((TextView)root.findViewById(R.id.tvWeekNumber)).setText(underlinedString);

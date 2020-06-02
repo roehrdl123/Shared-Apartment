@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/tv_content"
-        android:inputType="textMultiLine|textPersonName"
+        android:inputType="textMultiLine"
         android:lines="3"
         android:minLines="3"
         app:layout_constraintBottom_toTopOf="@+id/btnVorlage"
