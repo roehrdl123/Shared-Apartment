@@ -6,18 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".qr.QrCodeAddTableActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTable"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <Button
+        android:id="@+id/floatingActionButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton3"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="addQrArtikel"
+        android:text="@string/string_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:onClick="onFinish"
+        android:text="@string/finished"
+        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvIdQrList"
-        tools:itemCount="5"
-        tools:listitem="@layout/view_qr_table_add_items" />
+        app:layout_constraintTop_toTopOf="@+id/floatingActionButton3" />
 
     <TextView
         android:id="@+id/tvIdQrList"
@@ -30,28 +41,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="id" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="addQrArtikel"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_black_48dp" />
-
-    <Button
-        android:id="@+id/button11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onFinish"
-        android:layout_marginStart="16dp"
-        android:text="@string/finished"
-        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButton3" />
+        app:layout_constraintTop_toBottomOf="@+id/tvIdQrList"
+        tools:itemCount="5"
+        tools:listitem="@layout/view_qr_table_add_items" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

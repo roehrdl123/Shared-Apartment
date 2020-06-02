@@ -28,7 +28,7 @@
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@+id/llActions"
         app:layout_constraintEnd_toStartOf="@+id/llActions"
         app:layout_constraintHorizontal_bias="0.5"

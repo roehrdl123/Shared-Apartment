@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.databinding.ActivityCustomShoppingListBinding;
 
@@ -21,19 +22,21 @@ public class CustomShoppingListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         binding = ActivityCustomShoppingListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        getSupportActionBar().setTitle(R.string.shoppingList);
     }
 
     public void onAddToShoppingList(View view)
     {
-        if(binding.tvAnzahl.getText() != null && binding.txtTitel.getText() != null)
+        if(binding.etAnzahl.getText() != null && binding.etTitle.getText() != null)
         {
-            int anz = Integer.parseInt(binding.tvAnzahlTemplate.getText().toString());
-            String title = binding.txtTitel.getText().toString();
+            int anz = Integer.parseInt(binding.etAnzahl.getText().toString());
+            String title = binding.etTitle.getText().toString();
 
             Artikel a = new Artikel(anz, title);
-            if (binding.txtBezeichnung.getText() != null)
+            if (binding.etBez.getText() != null)
             {
-                String bez = binding.txtBezeichnung.getText().toString();
+                String bez = binding.etBez.getText().toString();
                 a.setContent(bez);
             }
             setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
@@ -45,15 +48,15 @@ public class CustomShoppingListActivity extends AppCompatActivity
     public void onSaveAndAdd(View view)
     {
 
-        if(binding.tvAnzahl.getText() != null && binding.txtTitel.getText() != null)
+        if(binding.etAnzahl.getText() != null && binding.etTitle.getText() != null)
         {
-            int anz = Integer.parseInt(binding.tvAnzahlTemplate.getText().toString());
-            String title = binding.txtTitel.getText().toString();
+            int anz = Integer.parseInt(binding.etAnzahl.getText().toString());
+            String title = binding.etTitle.getText().toString();
 
             Artikel a = new Artikel(anz, title);
-            if (binding.txtBezeichnung.getText() != null)
+            if (binding.etBez.getText() != null)
             {
-                String bez = binding.txtBezeichnung.getText().toString();
+                String bez = binding.etBez.getText().toString();
                 a.setContent(bez);
             }
             setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
@@ -64,5 +67,10 @@ public class CustomShoppingListActivity extends AppCompatActivity
 
             finish();
         }
+    }
+
+    public void onCancel(View view)
+    {
+        finish();
     }
 }

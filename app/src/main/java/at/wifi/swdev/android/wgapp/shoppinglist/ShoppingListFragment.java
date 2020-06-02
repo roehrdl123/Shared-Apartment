@@ -10,7 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -116,7 +118,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
     private void onAddTemplateShoppingList()
     {
 
-        FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").addListenerForSingleValueEvent(new ValueEventListener()
+        FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").orderByChild("title").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -142,7 +144,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
                         }
                     });
 
-                    builder.setTitle("Wähle aus einer Vorlage!");
+                    builder.setTitle(R.string.choose_template);
                     builder.setView(R.layout.popup_template_add_shopping);
 
                     dialogTemplate = builder.create();
@@ -157,6 +159,19 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
                     ArrayAdapter<Artikel> spinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, artikel);
                     spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     templateSpinner.setAdapter(spinnerArrayAdapter);
+                    templateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                    {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+                        {
+                            ((EditText)dialogTemplate.findViewById(R.id.etAnzahl)).setText(String.valueOf(artikel.get(i).getQuantity()));
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
                 }
                 else
                 {
@@ -179,7 +194,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
         if (spinner.getSelectedItem() != null)
         {
             Artikel a = (Artikel) spinner.getAdapter().getItem(spinner.getSelectedItemPosition());
-            TextView tvAmountTemplate = dialogTemplate.findViewById(R.id.tvAnzahlTemplate);
+            TextView tvAmountTemplate = dialogTemplate.findViewById(R.id.etAnzahl);
             if (tvAmountTemplate.getText().length() != 0 && tvAmountTemplate.getText() != null)
             {
                 a.setQuantity(Integer.parseInt(tvAmountTemplate.getText().toString()));
@@ -228,6 +243,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
             {
                 Artikel currentArtikel = (Artikel) art;
                 String key = database.push().getKey();
+                currentArtikel.setId(key);
                 updates.put(key, currentArtikel);
             }
         }
@@ -270,30 +286,8 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
 
     private void addListeners()
     {
-        dialogAdd.findViewById(R.id.btnQrShopping).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                onAddQRShoppingList();
-            }
-        });
-
-        dialogAdd.findViewById(R.id.btnCustomShopping).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                onAddCustomShoppingList();
-            }
-        });
-        dialogAdd.findViewById(R.id.btnVorlageShopping).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                onAddTemplateShoppingList();
-            }
-        });
+        dialogAdd.findViewById(R.id.btnQrShopping).setOnClickListener(view -> onAddQRShoppingList());
+        dialogAdd.findViewById(R.id.btnCustomShopping).setOnClickListener(view -> onAddCustomShoppingList());
+        dialogAdd.findViewById(R.id.btnVorlageShopping).setOnClickListener(view -> onAddTemplateShoppingList());
     }
 }

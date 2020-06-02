@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -83,14 +84,10 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
                     {
                         myID = dataSnapshot.getValue(Integer.class);
                     }
-                    root.findViewById(R.id.btnAddCal).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            onNewCalendarEntry(v);
-                        }
-                    });
+                    root.findViewById(R.id.btnAddCal).setOnClickListener(v -> onNewCalendarEntry(v));
                     request();
+                    currDate = Calendar.getInstance();
+                    setEvents();
                 }
 
                 @Override
@@ -107,28 +104,6 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
         return root;
     }
 
-    //            if(myID == -1)
-//            {
-//                ContentResolver cr = getContentResolver();
-//                Uri uri = CalendarContract.Calendars.CONTENT_URI;
-//
-//                Cursor cursor = cr.query(uri, EVENT_PROJECTION, null, null, null);
-//
-//                Map<String, String> map = new HashMap<>();
-//
-//                try
-//                {
-//                    while (cursor.moveToNext())
-//                    {
-//                        map.put(cursor.getString(0), cursor.getString(2));
-//                    }
-//                    onChooser(map);
-//                }
-//                catch (Exception e)
-//                {
-//                    Log.d(TAG, "request: " + e.getMessage());
-//                }
-//            }
     private void request()
     {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)
@@ -147,20 +122,18 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
 
             adapter.setClickListener(this);
 
-            final RecyclerView recyclerView = root.findViewById(R.id.rvCal);
+            RecyclerView recyclerView = root.findViewById(R.id.rvCal);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(adapter);
 
 
             setListeners(adapter);
-
-            setEvents();
         }
     }
 
     private void setEvents()
     {
-        final List<EventDay> events = new ArrayList<>();
+        List<EventDay> events = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference("cal").child(currDate.get(Calendar.YEAR) + "").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -191,6 +164,9 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
                                 calendar.setTimeInMillis(timestamp);
                                 events.add(new EventDay(calendar, R.drawable.ic_event_black_24dp));
                             }
+                            if(i.equals(weeks.get(weeks.size() - 1))) {
+                                calendarView.setEvents(events);
+                            }
                         }
 
                         @Override
@@ -200,7 +176,6 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
                         }
                     });
                 }
-                calendarView.setEvents(events);
             }
 
             @Override
@@ -213,48 +188,34 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
 
     private void setListeners(final CalendarMainAdapter adapter)
     {
-        calendarView.setOnDayClickListener(new OnDayClickListener()
+        calendarView.setOnDayClickListener(eventDay ->
         {
-            @Override
-            public void onDayClick(@NonNull EventDay eventDay)
-            {
-                Calendar cal = eventDay.getCalendar();
+            Calendar cal = eventDay.getCalendar();
 
-                Query query = FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
-                FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainFragment.this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
-                adapter.updateOptions(options);
-                adapter.notifyDataSetChanged();
-                String textHelper = getResources().getString(R.string.week_number) + String.valueOf(cal.get(Calendar.WEEK_OF_YEAR));
-                SpannableString underlinedString = new SpannableString(textHelper);
-                underlinedString.setSpan(new UnderlineSpan(), 0, underlinedString.length(), 0);
-                ((TextView)root.findViewById(R.id.tvWeekNumber)).setText(underlinedString);
-
-                try
-                {
-                    calendarView.setDate(cal);
-                }
-                catch (OutOfDateRangeException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            Query query = FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
+            FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainFragment.this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
+            adapter.updateOptions(options);
+            adapter.notifyDataSetChanged();
+            String textHelper = getResources().getString(R.string.week_number) + " " +  String.valueOf(cal.get(Calendar.WEEK_OF_YEAR));
+            SpannableString underlinedString = new SpannableString(textHelper);
+            underlinedString.setSpan(new UnderlineSpan(), 0, underlinedString.length(), 0);
+            ((TextView)root.findViewById(R.id.tvWeekNumber)).setText(underlinedString);
         });
 
-        calendarView.setOnForwardPageChangeListener(new OnCalendarPageChangeListener() {
-            @Override
-            public void onChange()
-            {
-                setNothingRV(adapter);
-            }
-        });
+        calendarView.setOnForwardPageChangeListener(() -> setNothingRV(adapter));
 
-        calendarView.setOnPreviousPageChangeListener(new OnCalendarPageChangeListener() {
-            @Override
-            public void onChange()
-            {
-                setNothingRV(adapter);
-            }
-        });
+        calendarView.setOnPreviousPageChangeListener(() -> setNothingRV(adapter));
+    }
+
+    private void setNothingRV(CalendarMainAdapter adapter)
+    {
+        Query query1 = FirebaseDatabase.getInstance().getReference("1");
+        FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainFragment.this).setQuery(query1, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
+        adapter.updateOptions(options);
+        adapter.notifyDataSetChanged();
+        ((TextView)root.findViewById(R.id.tvWeekNumber)).setText("");
+        currDate = calendarView.getCurrentPageDate();
+        setEvents();
     }
 
     private void onChooser(final Map<String, String> map)
@@ -343,21 +304,11 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
                 Calendar calendar = Calendar.getInstance();
                 calendar.clear();
                 calendar.setTimeInMillis(cal.getDateStart());
-                List<EventDay> eventDays = new ArrayList<>();
-                eventDays.add(new EventDay(calendar, R.drawable.ic_event_black_24dp));
-                calendarView.setEvents(eventDays);
+                currDate.setTimeInMillis(cal.getDateStart());
+                setEvents();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void setNothingRV(CalendarMainAdapter adapter)
-    {
-        Query query1 = FirebaseDatabase.getInstance().getReference("1");
-        FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainFragment.this).setQuery(query1, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
-        adapter.updateOptions(options);
-        adapter.notifyDataSetChanged();
-        ((TextView)root.findViewById(R.id.tvWeekNumber)).setText("");
     }
 
     @Override
@@ -373,7 +324,33 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
         {
             helperCal.setTimeInMillis(model.getDateStart());
             FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(helperCal.get(java.util.Calendar.YEAR))).child(String.valueOf(helperCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(model.getId()).removeValue();
+            currDate.setTimeInMillis(model.getDateStart());
+            setEvents();
             Toast.makeText(getContext(), R.string.remove_cal, Toast.LENGTH_SHORT).show();
         }
     }
 }
+
+
+//            if(myID == -1)
+//            {
+//                ContentResolver cr = getContentResolver();
+//                Uri uri = CalendarContract.Calendars.CONTENT_URI;
+//
+//                Cursor cursor = cr.query(uri, EVENT_PROJECTION, null, null, null);
+//
+//                Map<String, String> map = new HashMap<>();
+//
+//                try
+//                {
+//                    while (cursor.moveToNext())
+//                    {
+//                        map.put(cursor.getString(0), cursor.getString(2));
+//                    }
+//                    onChooser(map);
+//                }
+//                catch (Exception e)
+//                {
+//                    Log.d(TAG, "request: " + e.getMessage());
+//                }
+//            }

@@ -18,7 +18,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/qrcodescan_120401" />
+        app:srcCompat="@drawable/sharp_qr_code_black" />
 
     <Button
         android:id="@+id/btnQrShopping"

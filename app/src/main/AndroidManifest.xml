@@ -24,9 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".calendar.CalendarAddActivity" />
-        <activity android:name=".calendar.CalendarMainFragment" />
-        <activity android:name=".todolist.TodoListMainFragment" />
         <activity
             android:name=".qr.QrCodeListEditActivity"
             android:parentActivityName=".qr.QrCodeListActivity" />
@@ -38,7 +35,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".qr.QrCodeAddTableActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".qr.QrCodeListActivity" />
         <activity
             android:name=".shoppinglist.ShowItemShoppingListActivity"
             android:parentActivityName=".MainActivity" />
@@ -54,10 +51,12 @@
         <activity
             android:name=".shoppinglist.QrCodeScannerActivity"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".calendar.CalendarEditActivity"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".calendar.CalendarAddActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

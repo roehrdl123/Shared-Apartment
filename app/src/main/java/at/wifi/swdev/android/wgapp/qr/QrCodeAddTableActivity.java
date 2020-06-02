@@ -38,9 +38,10 @@ import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.data.QRItems;
 import at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeTableAddBinding;
+import at.wifi.swdev.android.wgapp.onListItemClickListener;
 import at.wifi.swdev.android.wgapp.shoppinglist.CustomShoppingListActivity;
 
-public class QrCodeAddTableActivity extends AppCompatActivity
+public class QrCodeAddTableActivity extends AppCompatActivity implements onListItemClickListener<Artikel>
 {
     public static final int REQUEST_CODE_NEW_QR_ITEM = 1234;
     private ActivityQrCodeTableAddBinding binding;
@@ -155,6 +156,7 @@ public class QrCodeAddTableActivity extends AppCompatActivity
             FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(QrCodeAddTableActivity.this).setQuery(qrcodeQuery, Artikel.class).build();
 
             QrCodeAddTableListAdapter adapter = new QrCodeAddTableListAdapter(options);
+            adapter.setListener(this);
             binding.rvTable.setLayoutManager(new LinearLayoutManager(QrCodeAddTableActivity.this));
             binding.rvTable.setAdapter(adapter);
         }
@@ -262,5 +264,11 @@ public class QrCodeAddTableActivity extends AppCompatActivity
                 // Handle any errors
             }
         });
+    }
+
+    @Override
+    public void onListItemClick(Artikel model, int requestCode)
+    {
+        FirebaseDatabase.getInstance().getReference("qrcodes").child(qr.getKey()).child("items").child(model.getId()).removeValue();
     }
 }

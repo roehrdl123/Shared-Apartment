@@ -5,80 +5,59 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:textSize="18sp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/textView9"
-        app:layout_constraintEnd_toEndOf="@+id/tvTitleQrArticle"
-        app:layout_constraintStart_toStartOf="@+id/tvTitleQrArticle"
-        app:layout_constraintTop_toTopOf="@+id/textView9" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/quantity"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/btnChangeQuantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
         android:text="@string/change_quantity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitleQrArticle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleQrArticle"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/tvTitleQrArticle"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
+        android:gravity="center|left"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/txAmount"
-        app:layout_constraintEnd_toStartOf="@+id/ivDelete"
-        app:layout_constraintStart_toEndOf="@+id/txAmount"
+        app:layout_constraintEnd_toStartOf="@+id/txAmount"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txAmount"
+        app:layout_constraintVertical_bias="0.0"
         tools:text="@string/title" />
 
     <EditText
         android:id="@+id/txAmount"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:ems="10"
+        android:autofillHints=""
+        android:gravity="center"
         android:hint="@string/quantity"
         android:inputType="number"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView9"
-        app:layout_constraintStart_toStartOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
-        android:autofillHints="" />
+        app:layout_constraintEnd_toStartOf="@+id/ivDelete"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivDelete"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txAmount"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txAmount"
         app:srcCompat="@drawable/ic_delete_black_24dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

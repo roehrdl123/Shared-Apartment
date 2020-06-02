@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Todo;
 import at.wifi.swdev.android.wgapp.databinding.ActivityCustomTodoListBinding;
 
@@ -22,6 +23,7 @@ public class CustomTodoListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         binding = ActivityCustomTodoListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getSupportActionBar().setTitle(R.string.todo);
     }
 
     public void onAddCustomTodo(View view)

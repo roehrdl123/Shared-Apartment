@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menuQrTable"
-        android:icon="@drawable/qrcodescan_120401"
+        android:icon="@drawable/sharp_qr_code_white"
         android:title="@string/qrMenu"
         app:showAsAction="always" />
 </menu>

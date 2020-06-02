@@ -92,27 +92,13 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
 
     private void bindListeners()
     {
-        dialogAdd.findViewById(R.id.btnAddTodoCustom).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                onAddTemplateTodo();
-            }
-        });
-        dialogAdd.findViewById(R.id.btnAddTodoCustom).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                onAddCustomTodo();
-            }
-        });
+        dialogAdd.findViewById(R.id.btnAddTodoCustom).setOnClickListener(v -> onAddCustomTodo());
+        dialogAdd.findViewById(R.id.btnAddTodoTemp).setOnClickListener(v -> onAddTemplateTodo());
     }
 
     private void onAddTemplateTodo()
     {
-        FirebaseDatabase.getInstance().getReference("templates").child("todos").addListenerForSingleValueEvent(new ValueEventListener()
+        FirebaseDatabase.getInstance().getReference("templates").child("todos").orderByChild("title").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -122,23 +108,11 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
                     dialogAdd.dismiss();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int id)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
+                    builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.dismiss());
 
-                    builder.setPositiveButton(R.string.string_add, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int id)
-                        {
-                            onAddTemplate();
-                        }
-                    });
+                    builder.setPositiveButton(R.string.string_add, (dialog, id) -> onAddTemplate());
 
-                    builder.setTitle("Wähle aus einer Vorlage!");
+                    builder.setTitle(R.string.choose_template);
                     builder.setView(R.layout.popup_template_add_todo);
 
                     dialogTemplate = builder.create();

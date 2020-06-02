@@ -50,6 +50,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
         binding = ActivityQrCodeScannerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
+        getSupportActionBar().setTitle(R.string.qrscanner);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
         {
@@ -225,6 +226,11 @@ public class QrCodeScannerActivity extends AppCompatActivity
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+        finish();
+    }
+
+    public void onCancel(View view)
+    {
         finish();
     }
 }

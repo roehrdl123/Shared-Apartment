@@ -31,6 +31,7 @@ public class ShowItemTodoListActivity extends AppCompatActivity
         binding = ActivityShowItemTodoListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         todo = (Todo) getIntent().getSerializableExtra(SERIALIZABLE_EXTRA);
+        getSupportActionBar().setTitle(R.string.todo);
 
         binding.swDone.setChecked(todo.isDone());
         binding.etTitle.setText(todo.getTitle());

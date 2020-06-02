@@ -26,13 +26,14 @@
     <string name="no_template">Keine Vorlagen vorhanden</string>
     <string name="qr_code">QR-Code</string>
     <string name="qrCodeActionBar">QrCode Zuweisungstabelle</string>
+    <string name="qrscanner">Qr-Scanner</string>
     <string name="qrMenu">QrMenu</string>
     <string name="shoppingList">Einkaufsliste</string>
     <string name="start">Start</string>
     <string name="str_back">Schließen</string>
     <string name="cancel">Abbrechen</string>
     <string name="string_add">Hinzufügen</string>
-    <string name="string_template">Als Vorlage speichern</string>
+    <string name="string_template">Speichern</string>
     <string name="thisQrIsNotInDatabase">Diesen QR-Code gibt es nicht. Versuchen sie es erneut!</string>
     <string name="todo">ToDo Liste</string>
     <string name="quantity">Anzahl</string>
@@ -48,4 +49,5 @@
     <string name="remove_cal">Der Eintrag wurde gelöscht!</string>
     <string name="no_permission_cal">Ohne Berechtigung kann das Programm möglicherweise nicht richtig funktionieren.</string>
     <string name="beginn">Beginn</string>
+    <string name="choose_template">Wähle eine Vorlage!</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeItemsBinding;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
@@ -26,6 +27,7 @@ public class QrCodeItemsActivity extends AppCompatActivity implements onListItem
         super.onCreate(savedInstanceState);
         at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeItemsBinding binding = ActivityQrCodeItemsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getSupportActionBar().setTitle(R.string.qrscanner);
 
         Intent intent = getIntent();
         ArrayList artikel = intent.getParcelableArrayListExtra(QrCodeScannerActivity.ARTIKEL_EXTRA);
