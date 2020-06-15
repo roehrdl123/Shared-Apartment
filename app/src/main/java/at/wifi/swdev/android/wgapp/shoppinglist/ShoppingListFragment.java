@@ -1,7 +1,6 @@
 package at.wifi.swdev.android.wgapp.shoppinglist;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,11 +18,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import at.wifi.swdev.android.wgapp.MainActivity;
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
@@ -60,14 +62,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
         setHasOptionsMenu(true);
 
         RecyclerView recyclerView = root.findViewById(R.id.rvShoppingList);
-        root.findViewById(R.id.btnAddToShop).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                addShoppingList();
-            }
-        });
+        root.findViewById(R.id.btnAddToShop).setOnClickListener(view -> addShoppingList());
         Query shoppinglistQuery = FirebaseDatabase.getInstance().getReference("shoppinglist");
 
         FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(this).setQuery(shoppinglistQuery, Artikel.class).build();
@@ -84,13 +79,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int id)
-            {
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.dismiss());
 
         builder.setTitle("Wähle aus!");
         builder.setView(R.layout.popup_shoppinglist);
@@ -128,21 +117,9 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
                     dialogAdd.dismiss();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int id)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
+                    builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.dismiss());
 
-                    builder.setPositiveButton(R.string.string_add, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int id)
-                        {
-                            onAddTemplate();
-                        }
-                    });
+                    builder.setPositiveButton(R.string.string_add, (dialog, id) -> onAddTemplate());
 
                     builder.setTitle(R.string.choose_template);
                     builder.setView(R.layout.popup_template_add_shopping);
@@ -164,16 +141,16 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
                         {
-                            ((EditText)dialogTemplate.findViewById(R.id.etAnzahl)).setText(String.valueOf(artikel.get(i).getQuantity()));
+                            ((EditText) dialogTemplate.findViewById(R.id.etAnzahl)).setText(String.valueOf(artikel.get(i).getQuantity()));
                         }
 
                         @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
+                        public void onNothingSelected(AdapterView<?> adapterView)
+                        {
 
                         }
                     });
-                }
-                else
+                } else
                 {
                     Toast.makeText(getContext(), R.string.no_template, Toast.LENGTH_SHORT).show();
                 }
@@ -263,7 +240,11 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater)
     {
+        MenuCompat.setGroupDividerEnabled(menu, true);
+
         inflater.inflate(R.menu.qr_codes, menu);
+        inflater.inflate(R.menu.delete_done, menu);
+        inflater.inflate(R.menu.signout, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -274,14 +255,61 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
         {
             startQrMenu();
             return true;
+        } else if (item.getItemId() == R.id.menuDelete)
+        {
+            removeAll();
+            return true;
+        } else if (item.getItemId() == R.id.menu_signout)
+        {
+            signout();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void signout()
+    {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void startQrMenu()
     {
         Intent intent = new Intent(getContext(), QrCodeListActivity.class);
         startActivity(intent);
+    }
+
+    private void removeAll()
+    {
+        FirebaseDatabase.getInstance().getReference("shoppinglist").addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                List<String> artikelKeys = new ArrayList<>();
+                for (DataSnapshot data : dataSnapshot.getChildren())
+                {
+                    if (data.getValue(Artikel.class).isDone())
+                    {
+                        artikelKeys.add(data.getKey());
+                    }
+                }
+
+                for (String artKey : artikelKeys)
+                {
+                    FirebaseDatabase.getInstance().getReference("shoppinglist").child(artKey).removeValue();
+                }
+                Toast.makeText(getContext(), R.string.delete_all_art, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
+
+            }
+        });
     }
 
     private void addListeners()

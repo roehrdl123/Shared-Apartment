@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WGApp</string>
+    <string name="app_name">WG-Planer</string>
     <string name="addTodo">Hinzufügen eines Todos</string>
     <string name="occupied">Belegt</string>
     <string name="cal_chooser">Wähle aus einem Kalender aus</string>
@@ -33,7 +33,7 @@
     <string name="str_back">Schließen</string>
     <string name="cancel">Abbrechen</string>
     <string name="string_add">Hinzufügen</string>
-    <string name="string_template">Speichern</string>
+    <string name="save">Speichern</string>
     <string name="thisQrIsNotInDatabase">Diesen QR-Code gibt es nicht. Versuchen sie es erneut!</string>
     <string name="todo">ToDo Liste</string>
     <string name="quantity">Anzahl</string>
@@ -50,4 +50,11 @@
     <string name="no_permission_cal">Ohne Berechtigung kann das Programm möglicherweise nicht richtig funktionieren.</string>
     <string name="beginn">Beginn</string>
     <string name="choose_template">Wähle eine Vorlage!</string>
+    <string name="amount_zero">Geben Sie eine Zahl größer als 0 ein!</string>
+    <string name="article_edited">Der Artikel wurde geändert!</string>
+    <string name="no_account">Anmeldung fehlgeschlagen! Ohne Account kann die App nicht ausgeführt werden!</string>
+    <string name="delete_all">Erledigte löschen</string>
+    <string name="delete_all_art">Alle abgeschlossenen Artikel gelöscht</string>
+    <string name="delete_all_todo">Alle abgeschlossenen Einträge gelöscht</string>
+    <string name="logout">Ausloggen</string>
 </resources>

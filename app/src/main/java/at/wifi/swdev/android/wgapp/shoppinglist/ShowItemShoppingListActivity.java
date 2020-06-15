@@ -31,6 +31,7 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         binding = ActivityShowItemShoppingListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getSupportActionBar().setTitle(R.string.shoppingList);
 
         artikel = (Artikel) getIntent().getSerializableExtra(SERIALIZABLE_EXTRA);
 
@@ -54,6 +55,7 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
 
     private void showEdit()
     {
+        binding.edit.setText(R.string.save);
         binding.tvHeadline.setText(R.string.edit);
         binding.swDone.setClickable(true);
         binding.etAmount.setKeyListener((KeyListener) binding.etAmount.getTag());
@@ -63,6 +65,7 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
 
     private void showInfo()
     {
+        binding.edit.setText(R.string.edit);
         binding.tvHeadline.setText(R.string.info);
         binding.swDone.setClickable(false);
         EditText text = binding.etAmount;
@@ -94,16 +97,23 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
         }
         else
         {
-            if (binding.etAmount.getText() != null && binding.etTitle.getText() != null && binding.etContent.getText() != null)
+            if(binding.etAmount.getText() != null && Integer.parseInt(binding.etAmount.getText().toString()) >= 0)
             {
-                artikel.setQuantity(Integer.parseInt(binding.etAmount.getText().toString()));
-                artikel.setTitle(binding.etTitle.getText().toString());
-                artikel.setContent(binding.etContent.getText().toString());
-                artikel.setDone(binding.swDone.isChecked());
+                if (binding.etTitle.getText() != null && binding.etContent.getText() != null)
+                {
+                    artikel.setQuantity(Integer.parseInt(binding.etAmount.getText().toString()));
+                    artikel.setTitle(binding.etTitle.getText().toString());
+                    artikel.setContent(binding.etContent.getText().toString());
+                    artikel.setDone(binding.swDone.isChecked());
 
-                FirebaseDatabase.getInstance().getReference("shoppinglist").child(artikel.getId()).setValue(artikel);
-                Toast.makeText(this, "Der Artikel wurde geändert!", Toast.LENGTH_SHORT).show();
-                finish();
+                    FirebaseDatabase.getInstance().getReference("shoppinglist").child(artikel.getId()).setValue(artikel);
+                    Toast.makeText(this, R.string.article_edited, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+            else
+            {
+                Toast.makeText(this, R.string.amount_zero, Toast.LENGTH_SHORT).show();
             }
         }
     }

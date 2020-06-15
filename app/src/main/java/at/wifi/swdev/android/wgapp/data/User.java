@@ -6,7 +6,6 @@ public class User implements Serializable
 {
     public String id;
     public String name;
-    public String calendarName;
 
 
     public User()
@@ -18,6 +17,5 @@ public class User implements Serializable
     {
         this.id = id;
         this.name = name;
-        calendarName = "";
     }
 }

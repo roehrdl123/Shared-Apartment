@@ -51,6 +51,7 @@ public class ShowItemTodoListActivity extends AppCompatActivity
 
     private void showEdit()
     {
+        binding.edit.setText(R.string.save);
         binding.tvHeadline.setText(R.string.edit);
         binding.swDone.setClickable(true);
         binding.etTitle.setKeyListener((KeyListener) binding.etTitle.getTag());
@@ -59,6 +60,7 @@ public class ShowItemTodoListActivity extends AppCompatActivity
 
     private void showInfo()
     {
+        binding.edit.setText(R.string.edit);
         binding.tvHeadline.setText(R.string.info);
         binding.swDone.setClickable(false);
 

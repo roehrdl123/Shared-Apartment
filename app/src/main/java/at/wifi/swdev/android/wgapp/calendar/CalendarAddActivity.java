@@ -46,7 +46,9 @@ public class CalendarAddActivity extends AppCompatActivity implements DatePicker
         binding = ActivityCalendarAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        datePickerDialog = new DatePickerDialog(this, this, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        Calendar cal = (Calendar) getIntent().getSerializableExtra(CalendarMainFragment.DAY_EXTRA);
+
+        datePickerDialog = new DatePickerDialog(this, this, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         timePickerDialog = new TimePickerDialog(this, this, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
 
         getSupportActionBar().setTitle(R.string.calendar);

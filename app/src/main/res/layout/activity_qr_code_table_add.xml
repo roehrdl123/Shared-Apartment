@@ -52,6 +52,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvIdQrList"
         tools:itemCount="5"
-        tools:listitem="@layout/view_qr_table_add_items" />
+        tools:listitem="@layout/view_qr_edit_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

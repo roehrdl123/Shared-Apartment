@@ -3,6 +3,7 @@ package at.wifi.swdev.android.wgapp.shoppinglist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +17,7 @@ public class CustomShoppingListActivity extends AppCompatActivity
 {
     public static final String ITEM_EXTRA = "Item";
     ActivityCustomShoppingListBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -28,44 +30,57 @@ public class CustomShoppingListActivity extends AppCompatActivity
 
     public void onAddToShoppingList(View view)
     {
-        if(binding.etAnzahl.getText() != null && binding.etTitle.getText() != null)
+        if (binding.etAnzahl.getText() != null && Integer.parseInt(binding.etAnzahl.getText().toString()) >= 0)
         {
-            int anz = Integer.parseInt(binding.etAnzahl.getText().toString());
-            String title = binding.etTitle.getText().toString();
-
-            Artikel a = new Artikel(anz, title);
-            if (binding.etBez.getText() != null)
+            if (binding.etTitle.getText() != null)
             {
-                String bez = binding.etBez.getText().toString();
-                a.setContent(bez);
-            }
-            setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
+                int anz = Integer.parseInt(binding.etAnzahl.getText().toString());
+                String title = binding.etTitle.getText().toString();
 
-            finish();
+                Artikel a = new Artikel(anz, title);
+                if (binding.etBez.getText() != null)
+                {
+                    String bez = binding.etBez.getText().toString();
+                    a.setContent(bez);
+                }
+                setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
+
+                finish();
+            }
+        }
+        else
+        {
+            Toast.makeText(this, R.string.amount_zero, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void onSaveAndAdd(View view)
     {
-
-        if(binding.etAnzahl.getText() != null && binding.etTitle.getText() != null)
+        if (binding.etAnzahl.getText() != null && Integer.parseInt(binding.etAnzahl.getText().toString()) >= 0)
         {
-            int anz = Integer.parseInt(binding.etAnzahl.getText().toString());
-            String title = binding.etTitle.getText().toString();
-
-            Artikel a = new Artikel(anz, title);
-            if (binding.etBez.getText() != null)
+            if (binding.etTitle.getText() != null)
             {
-                String bez = binding.etBez.getText().toString();
-                a.setContent(bez);
+                int anz = Integer.parseInt(binding.etAnzahl.getText().toString());
+                String title = binding.etTitle.getText().toString();
+
+                Artikel a = new Artikel(anz, title);
+                if (binding.etBez.getText() != null)
+                {
+                    String bez = binding.etBez.getText().toString();
+                    a.setContent(bez);
+                }
+                setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
+
+                String key = FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").push().getKey();
+                a.setId(key);
+                FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").child(key).setValue(a);
+
+                finish();
             }
-            setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
-
-            String key = FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").push().getKey();
-            a.setId(key);
-            FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").child(key).setValue(a);
-
-            finish();
+        }
+        else
+        {
+            Toast.makeText(this, R.string.amount_zero, Toast.LENGTH_SHORT).show();
         }
     }
 

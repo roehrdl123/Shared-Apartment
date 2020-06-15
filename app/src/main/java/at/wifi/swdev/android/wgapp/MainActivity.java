@@ -2,7 +2,7 @@ package at.wifi.swdev.android.wgapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,8 +16,6 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,28 +38,23 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
         FirebaseApp.initializeApp(this);
         //Ist User schon angemeldet?
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null)
         {
             //Der Benutzer ist nicht angemeldet
-            List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build(),
-                    new AuthUI.IdpConfig.PhoneBuilder().build(),
-                    new AuthUI.IdpConfig.GoogleBuilder().build());
+            List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
 
             startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setAvailableProviders(providers)
                             .build(), RC_SIGN_IN);
-        }
-        else
+        } else
         {
+            binding = ActivityMainBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
             showNavigationBar();
         }
     }
@@ -74,41 +67,50 @@ public class MainActivity extends AppCompatActivity
 
         if (requestCode == RC_SIGN_IN)
         {
+            binding = ActivityMainBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
 //            IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK)
             {
-                //User auslesen
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                //In Datenbank speichern
-                DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
-                users.child(user.getUid()).setValue(new User(user.getUid(), user.getDisplayName())).addOnCompleteListener(this, new OnCompleteListener<Void>()
+                if (data != null)
                 {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task)
+                    //User auslesen
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    //In Datenbank speichern
+                    DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
+                    users.child(user.getUid()).setValue(new User(user.getUid(), user.getDisplayName())).addOnCompleteListener(this, new OnCompleteListener<Void>()
                     {
-                        if (task.isSuccessful())
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task)
                         {
-                            showNavigationBar();
-                            Log.d(TAG, "onComplete: USER created");
-                        } else
-                        {
-                            Log.e(TAG, "onComplete: USER failed");
+                            if (task.isSuccessful())
+                            {
+                                showNavigationBar();
+                            } else
+                            {
+                                Toast.makeText(MainActivity.this, R.string.no_account, Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
                         }
-                    }
-                });
-            }
-            else
+                    });
+                } else
+                {
+                    binding.container.setClickable(false);
+                    Toast.makeText(MainActivity.this, R.string.no_account, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            } else
             {
                 //Anmeldung nicht erfolgreich
-                Snackbar.make(binding.getRoot(), "Fehler bei der Anmeldung", BaseTransientBottomBar.LENGTH_LONG).show();
-                Log.d(TAG, "Failed to sign in:" );//+ response.getError());
+                Toast.makeText(MainActivity.this, R.string.no_account, Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }
 
-    private void showNavigationBar()
+    public void showNavigationBar()
     {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -119,9 +121,8 @@ public class MainActivity extends AppCompatActivity
         NavigationUI.setupWithNavController(navView, navController);
     }
     /*
-    TODO: 1. Kalender einträge editieren / löschen
-    TODO: 2. Einstellen ob man auf knopfdruck lieber den Tag oder die Woche sehen will??
-    TODO: 3. Design
+    TODO: 2. Alle erledigten löschen
+    TODO: 3: maybe kalender swipe to delete? & Kalender Popup??
     */
 
 }

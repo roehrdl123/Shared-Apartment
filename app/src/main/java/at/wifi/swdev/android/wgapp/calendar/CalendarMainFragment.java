@@ -1,34 +1,27 @@
 package at.wifi.swdev.android.wgapp.calendar;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
-import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
-import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener;
-import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,13 +29,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
+import at.wifi.swdev.android.wgapp.MainActivity;
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
 
@@ -50,8 +42,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class CalendarMainFragment extends Fragment implements onListItemClickListener<at.wifi.swdev.android.wgapp.data.Calendar>
 {
-    public static final int REQUEST_CODE_PERMISSION = 2;
     public static final String CAL_EXTRA = "calExtra";
+    public static final String DAY_EXTRA = "DAY";
     private AlertDialog dialog;
     private int myID = -1;
     private View root;
@@ -66,15 +58,14 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
     {
         root = inflater.inflate(R.layout.fragment_calendar_main, container, false);
 
+        setHasOptionsMenu(true);
+
         super.onCreate(savedInstanceState);
 
         calendarView = root.findViewById(R.id.calendar);
         calendarView.showCurrentMonthPage();
         calendarView.setSwipeEnabled(true);
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)
-        {
-            //Permission already granted
             FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
@@ -96,18 +87,12 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
 
                 }
             });
-        }
-        else
-        {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, REQUEST_CODE_PERMISSION);
-        }
+
         return root;
     }
 
     private void request()
     {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)
-        {
 
             String textHelper = getResources().getString(R.string.week_number) + " " + String.valueOf(currDate.get(Calendar.WEEK_OF_YEAR));
             SpannableString underlinedString = new SpannableString(textHelper);
@@ -128,7 +113,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
 
 
             setListeners(adapter);
-        }
+
     }
 
     private void setEvents()
@@ -218,78 +203,10 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
         setEvents();
     }
 
-    private void onChooser(final Map<String, String> map)
-    {
-        if (map.size() > 0)
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int id)
-                {
-                    dialog.dismiss();
-                }
-            });
-
-            builder.setPositiveButton(R.string.string_add, new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int id)
-                {
-                    onCalendarChosen(map);
-                }
-            });
-
-            builder.setTitle("Wähle aus einer Vorlage!");
-            builder.setView(R.layout.popup_calendar_chooser);
-
-            dialog = builder.create();
-            dialog.show();
-
-            Spinner spinner = dialog.findViewById(R.id.spCalendar);
-            List<String> list = new ArrayList<>(map.values());
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(spinnerArrayAdapter);
-        }
-        else
-        {
-            Toast.makeText(getContext(), "Kein Kalender vorhanden!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void onCalendarChosen(Map<String, String> map)
-    {
-        Spinner spinner = dialog.findViewById(R.id.spCalendar);
-        int position = spinner.getSelectedItemPosition();
-
-        String id = (String) map.keySet().toArray()[position];
-        myID = Integer.parseInt(id);
-        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid()).child("calId").setValue(id);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-
-        if (requestCode == REQUEST_CODE_PERMISSION)
-        {
-            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
-            {
-                //Permission granted
-                request();
-            }
-            else
-            {
-                Toast.makeText(getContext(), R.string.no_permission_cal, Toast.LENGTH_SHORT).show();
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
     private void onNewCalendarEntry(View view)
     {
         Intent intent = new Intent(getContext(), CalendarAddActivity.class);
+        intent.putExtra(DAY_EXTRA, calendarView.getFirstSelectedDate());
         startActivityForResult(intent, CalendarAddActivity.REQUEST_CODE_CAL_ADD);
     }
 
@@ -329,28 +246,30 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
             Toast.makeText(getContext(), R.string.remove_cal, Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater)
+    {
+        inflater.inflate(R.menu.signout, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        if (item.getItemId() == R.id.menu_signout)
+        {
+            signout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void signout()
+    {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
 }
-
-
-//            if(myID == -1)
-//            {
-//                ContentResolver cr = getContentResolver();
-//                Uri uri = CalendarContract.Calendars.CONTENT_URI;
-//
-//                Cursor cursor = cr.query(uri, EVENT_PROJECTION, null, null, null);
-//
-//                Map<String, String> map = new HashMap<>();
-//
-//                try
-//                {
-//                    while (cursor.moveToNext())
-//                    {
-//                        map.put(cursor.getString(0), cursor.getString(2));
-//                    }
-//                    onChooser(map);
-//                }
-//                catch (Exception e)
-//                {
-//                    Log.d(TAG, "request: " + e.getMessage());
-//                }
-//            }

@@ -2,10 +2,12 @@ package at.wifi.swdev.android.wgapp.todolist;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -28,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.wifi.swdev.android.wgapp.MainActivity;
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Todo;
 import at.wifi.swdev.android.wgapp.onListItemClickListener;
@@ -46,6 +50,8 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
     {
         View root = inflater.inflate(R.layout.fragment_todo_list_main, container, false);
 
+        setHasOptionsMenu(true);
+
         RecyclerView recyclerView = root.findViewById(R.id.rvTodoList);
 
         Query todoQuery = FirebaseDatabase.getInstance().getReference("todos");
@@ -59,14 +65,7 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        root.findViewById(R.id.btnAddToTodo).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                onAddToDoList();
-            }
-        });
+        root.findViewById(R.id.btnAddToTodo).setOnClickListener(v -> onAddToDoList());
         return root;
     }
 
@@ -74,13 +73,7 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int id)
-            {
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.dismiss());
 
         builder.setTitle("Wähle aus!");
         builder.setView(R.layout.popup_todolist);
@@ -187,5 +180,69 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
         intent.putExtra(ShowItemTodoListActivity.REQUEST_CODE_EXTRA, requestCode);
         intent.putExtra(ShowItemTodoListActivity.SERIALIZABLE_EXTRA, model);
         startActivity(intent);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater)
+    {
+        inflater.inflate(R.menu.delete_done, menu);
+        inflater.inflate(R.menu.signout, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        if (item.getItemId() == R.id.menuDelete)
+        {
+            removeAll();
+            return true;
+        }
+        else if (item.getItemId() == R.id.menu_signout)
+        {
+            signout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void signout()
+    {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    private void removeAll()
+    {
+        FirebaseDatabase.getInstance().getReference("todos").addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                List<String> artikelKeys = new ArrayList<>();
+                for (DataSnapshot data : dataSnapshot.getChildren())
+                {
+                    if (data.getValue(Todo.class).isDone())
+                    {
+                        artikelKeys.add(data.getKey());
+                    }
+                }
+
+                for (String artKey : artikelKeys)
+                {
+                    FirebaseDatabase.getInstance().getReference("todos").child(artKey).removeValue();
+                }
+                Toast.makeText(getContext(), R.string.delete_all_todo, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
+
+            }
+        });
     }
 }
