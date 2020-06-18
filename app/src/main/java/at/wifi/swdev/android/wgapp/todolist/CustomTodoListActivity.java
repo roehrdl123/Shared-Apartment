@@ -47,4 +47,9 @@ public class CustomTodoListActivity extends AppCompatActivity
             finish();
         }
     }
+
+    public void onCancel(View view)
+    {
+        finish();
+    }
 }

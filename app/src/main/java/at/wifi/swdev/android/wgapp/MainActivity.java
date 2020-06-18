@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity
         NavigationUI.setupWithNavController(navView, navController);
     }
     /*
-    TODO: 2. Alle erledigten löschen
     TODO: 3: maybe kalender swipe to delete? & Kalender Popup??
     */
 

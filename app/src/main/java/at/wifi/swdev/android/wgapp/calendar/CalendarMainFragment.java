@@ -231,19 +231,19 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
     @Override
     public void onListItemClick(at.wifi.swdev.android.wgapp.data.Calendar model, int requestCode)
     {
-        if( requestCode == 0)
+        switch (requestCode)
         {
-            Intent intent = new Intent(getContext(), CalendarEditActivity.class);
-            intent.putExtra(CalendarEditActivity.CAL_EXTRA, model);
-            startActivity(intent);
-        }
-        else if(requestCode == 1)
-        {
-            helperCal.setTimeInMillis(model.getDateStart());
-            FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(helperCal.get(java.util.Calendar.YEAR))).child(String.valueOf(helperCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(model.getId()).removeValue();
-            currDate.setTimeInMillis(model.getDateStart());
-            setEvents();
-            Toast.makeText(getContext(), R.string.remove_cal, Toast.LENGTH_SHORT).show();
+            case 0: Intent intent = new Intent(getContext(), CalendarEditActivity.class);
+                intent.putExtra(CalendarEditActivity.CAL_EXTRA, model);
+                startActivity(intent);
+                break;
+            case 1:helperCal.setTimeInMillis(model.getDateStart());
+                FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(helperCal.get(java.util.Calendar.YEAR))).child(String.valueOf(helperCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(model.getId()).removeValue();
+                currDate.setTimeInMillis(model.getDateStart());
+                setEvents();
+                Toast.makeText(getContext(), R.string.remove_cal, Toast.LENGTH_SHORT).show();
+                break;
+            default:
         }
     }
 

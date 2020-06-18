@@ -36,6 +36,7 @@ public class CalendarMainAdapter extends FirebaseRecyclerAdapter<Calendar, Calen
     {
         return new CalendarViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_calendar_list_item, parent, false));
     }
+
     @Override
     protected void onBindViewHolder(@NonNull CalendarViewHolder holder, int position, @NonNull final Calendar entry)
     {
@@ -43,24 +44,12 @@ public class CalendarMainAdapter extends FirebaseRecyclerAdapter<Calendar, Calen
         holder.startDateTV.setText(format.format(entry.getDateStart()));
         holder.endDateTV.setText(format.format(entry.getDateEnd()));
         holder.titleTV.setText(entry.getTitle());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                clickListener.onListItemClick(entry, 0);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> clickListener.onListItemClick(entry, 0));
 
         final java.util.Calendar entryDate = java.util.Calendar.getInstance();
         entryDate.setTimeInMillis(entry.getDateStart());
 
-        holder.deleteIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                clickListener.onListItemClick(entry,1);
-            }
-        });
+        holder.deleteIV.setOnClickListener(v -> clickListener.onListItemClick(entry, 1));
     }
 
     static class CalendarViewHolder extends RecyclerView.ViewHolder
@@ -84,4 +73,6 @@ public class CalendarMainAdapter extends FirebaseRecyclerAdapter<Calendar, Calen
     {
         this.clickListener = clickListener;
     }
+
+
 }
