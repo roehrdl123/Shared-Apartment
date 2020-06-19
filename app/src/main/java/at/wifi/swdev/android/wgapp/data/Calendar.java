@@ -9,16 +9,9 @@ public class Calendar implements Serializable
     private String content;
     private long dateStart;
     private long dateEnd;
-    private boolean notification;
 
     public Calendar()
     {
-    }
-
-    public Calendar(String title, String content)
-    {
-        this.title = title;
-        this.content = content;
     }
 
     public String getId()
@@ -69,15 +62,5 @@ public class Calendar implements Serializable
     public void setDateEnd(long dateEnd)
     {
         this.dateEnd = dateEnd;
-    }
-
-    public boolean isNotification()
-    {
-        return notification;
-    }
-
-    public void setNotification(boolean notification)
-    {
-        this.notification = notification;
     }
 }

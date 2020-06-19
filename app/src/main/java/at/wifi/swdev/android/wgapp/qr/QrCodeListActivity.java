@@ -10,14 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -88,103 +86,89 @@ public class QrCodeListActivity extends AppCompatActivity implements onListItemC
 
     private void setList()
     {
-        FirebaseStorage.getInstance().getReference("qrs").listAll().addOnSuccessListener(new OnSuccessListener<ListResult>()
+        FirebaseStorage.getInstance().getReference("qrs").listAll().addOnSuccessListener(listResult ->
+                FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
-            public void onSuccess(final ListResult listResult)
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
+                Map<Integer, QRItems> allQrsMap = new HashMap<>();
+                for (StorageReference item : listResult.getItems())
                 {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-                    {
-                        Map<Integer, QRItems> allQrsMap = new HashMap<>();
-                        for (StorageReference item : listResult.getItems())
-                        {
-                            int id = Integer.parseInt(item.getName().split("\\.")[0]);
-                            QRItems qr = new QRItems();
-                            qr.setQrId(id);
-                            qr.setOccupied(false);
-                            allQrsMap.put(id, qr);
-                        }
-                        for (DataSnapshot data : dataSnapshot.getChildren())
-                        {
-                            QRItems qrItem = data.getValue(QRItems.class);
-                            allQrsMap.put(qrItem.getQrId(), qrItem);
-                        }
+                    int id = Integer.parseInt(item.getName().split("\\.")[0]);
+                    QRItems qr = new QRItems();
+                    qr.setQrId(id);
+                    qr.setOccupied(false);
+                    allQrsMap.put(id, qr);
+                }
+                for (DataSnapshot data : dataSnapshot.getChildren())
+                {
+                    QRItems qrItem = data.getValue(QRItems.class);
+                    allQrsMap.put(qrItem.getQrId(), qrItem);
+                }
 
 
-                        qrItems = new ArrayList<>(allQrsMap.values());
+                qrItems = new ArrayList<>(allQrsMap.values());
 
-                        if(adapter == null)
-                        {
-                            adapter = new QrCodeListAdapter();
-                            adapter.setOnListItemClickListener(QrCodeListActivity.this);
-                            adapter.setResources(getResources());
-                            binding.rvQrs.setLayoutManager(new LinearLayoutManager(QrCodeListActivity.this));
-                            binding.rvQrs.setAdapter(adapter);
-                        }
+                if(adapter == null)
+                {
+                    adapter = new QrCodeListAdapter();
+                    adapter.setOnListItemClickListener(QrCodeListActivity.this);
+                    adapter.setResources(getResources());
+                    binding.rvQrs.setLayoutManager(new LinearLayoutManager(QrCodeListActivity.this));
+                    binding.rvQrs.setAdapter(adapter);
+                }
 
 
-                        adapter.setItems(qrItems);
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError)
-                    {
-                    }
-                });
+                adapter.setItems(qrItems);
+                adapter.notifyDataSetChanged();
             }
-        });
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
+            }
+        }));
     }
 
     public void onNewQr(View view)
     {
-        FirebaseStorage.getInstance().getReference("qrs").listAll().addOnSuccessListener(new OnSuccessListener<ListResult>()
+        FirebaseStorage.getInstance().getReference("qrs").listAll().addOnSuccessListener(listResult -> FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
-            public void onSuccess(final ListResult listResult)
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
+                HashSet<Integer> setData = new HashSet<>();
+                HashSet<Integer> setPics = new HashSet<>();
+                for (DataSnapshot data : dataSnapshot.getChildren())
                 {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-                    {
-                        HashSet<Integer> setData = new HashSet<>();
-                        HashSet<Integer> setPics = new HashSet<>();
-                        for (DataSnapshot data : dataSnapshot.getChildren())
-                        {
-                            QRItems qrItem = data.getValue(QRItems.class);
-                            setData.add(qrItem.getQrId());
-                        }
-                        for (StorageReference item : listResult.getItems())
-                        {
-                            int id = Integer.parseInt(item.getName().split("\\.")[0]);
-                            setPics.add(id);
-                        }
+                    QRItems qrItem = data.getValue(QRItems.class);
+                    setData.add(qrItem.getQrId());
+                }
+                for (StorageReference item : listResult.getItems())
+                {
+                    int id = Integer.parseInt(item.getName().split("\\.")[0]);
+                    setPics.add(id);
+                }
 
-                        setPics.removeAll(setData);
+                setPics.removeAll(setData);
 
-                        if (setPics.size() != 0)
-                        {
-                            Intent intent = new Intent(QrCodeListActivity.this, QrCodeAddTableActivity.class);
-                            startActivity(intent);
-                        } else
-                        {
-                            Toast.makeText(QrCodeListActivity.this, "Kein QR-Code verfügbar. Kontaktieren sie den Service :)", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                if (setPics.size() != 0)
+                {
+                    Intent intent = new Intent(QrCodeListActivity.this, QrCodeAddTableActivity.class);
+                    startActivity(intent);
+                } else
+                {
+                    Toast.makeText(QrCodeListActivity.this, "Kein QR-Code verfügbar. Kontaktieren sie den Service :)", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError)
-                    {
-
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
 
             }
-        });
+        }));
     }
 
     @Override

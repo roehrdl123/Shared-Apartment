@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
@@ -33,9 +32,7 @@ public class QrCodeAddTableListAdapter extends FirebaseRecyclerAdapter<Artikel, 
         holder.tvTitle.setText(model.getTitle());
         holder.tvContent.setText(model.getContent());
         holder.tvQuantity.setText(String.valueOf(model.getQuantity()));
-        holder.delIV.setOnClickListener(view -> {
-            listener.onListItemClick(model, 0);
-        });
+        holder.delIV.setOnClickListener(view -> listener.onListItemClick(model, 0));
     }
 
     @NonNull

@@ -37,38 +37,21 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
         holder.doneTodoIV.setImageResource(model.isDone() ? R.drawable.ic_check_green_24dp: R.drawable.ic_check_box_outline_blank_black_24dp);
         if(!model.isDone())
         {
-            holder.doneTodoIV.setOnClickListener(new View.OnClickListener()
+            holder.doneTodoIV.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    model.setDone(true);
-                    FirebaseDatabase.getInstance().getReference("todos").child(model.getId()).setValue(model);
-                }
+                model.setDone(true);
+                FirebaseDatabase.getInstance().getReference("todos").child(model.getId()).setValue(model);
             });
         }
-        holder.editTodoTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                onListItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_EDIT);
-            }
-        });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
+        holder.editTodoTV.setOnClickListener(v -> onListItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_EDIT));
+
+        holder.itemView.setOnClickListener(v -> onListItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO));
+
+        holder.deleteTodoTV.setOnClickListener(v ->
         {
-            onListItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
-        }
-    });
-        holder.deleteTodoTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                FirebaseDatabase.getInstance().getReference("todos").child(model.getId()).removeValue();
-                Toast.makeText(context, "Der Todo-Eintrag wurde gelöscht", Toast.LENGTH_SHORT).show();
-            }
+            FirebaseDatabase.getInstance().getReference("todos").child(model.getId()).removeValue();
+            Toast.makeText(context, "Der Todo-Eintrag wurde gelöscht", Toast.LENGTH_SHORT).show();
         });
     }
 

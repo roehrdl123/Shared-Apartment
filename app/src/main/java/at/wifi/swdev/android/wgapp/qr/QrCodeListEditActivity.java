@@ -16,8 +16,6 @@ import androidx.print.PrintHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -161,21 +159,10 @@ public class QrCodeListEditActivity extends AppCompatActivity implements onListI
         final PrintHelper photoPrinter = new PrintHelper(this);
         photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
         final long ONE_MEGABYTE = 1024 * 1024;
-        FirebaseStorage.getInstance().getReference("qrs").child(qrItem.getQrId() + ".png").getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>()
+        FirebaseStorage.getInstance().getReference("qrs").child(qrItem.getQrId() + ".png").getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes ->
         {
-            @Override
-            public void onSuccess(byte[] bytes)
-            {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                photoPrinter.printBitmap("test-print", bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener()
-        {
-            @Override
-            public void onFailure(@NonNull Exception exception)
-            {
-                // Handle any errors
-            }
-        });
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            photoPrinter.printBitmap("test-print", bitmap);
+        }).addOnFailureListener(exception -> {});
     }
 }

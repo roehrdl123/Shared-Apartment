@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,11 +41,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class CalendarMainFragment extends Fragment implements onListItemClickListener<at.wifi.swdev.android.wgapp.data.Calendar>
 {
-    public static final String CAL_EXTRA = "calExtra";
     public static final String DAY_EXTRA = "DAY";
     private AlertDialog dialog;
-    private int myID = -1;
-    private View root;
     private CalendarView calendarView;
     private Calendar currDate = Calendar.getInstance();
     private Calendar helperCal = Calendar.getInstance();
@@ -56,7 +52,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        root = inflater.inflate(R.layout.fragment_calendar_main, container, false);
+        View root = inflater.inflate(R.layout.fragment_calendar_main, container, false);
 
         setHasOptionsMenu(true);
 
@@ -66,54 +62,12 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
         calendarView.showCurrentMonthPage();
         calendarView.setSwipeEnabled(true);
 
-            FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-                {
-                    if (dataSnapshot.hasChild("calId"))
-                    {
-                        myID = dataSnapshot.getValue(Integer.class);
-                    }
-                    root.findViewById(R.id.btnAddCal).setOnClickListener(v -> onNewCalendarEntry(v));
-                    request();
-                    currDate = Calendar.getInstance();
-                    setEvents();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError)
-                {
-
-                }
-            });
+        root.findViewById(R.id.btnAddCal).setOnClickListener(this::onNewCalendarEntry);
+        currDate = Calendar.getInstance();
+        setEvents();
+        setListeners();
 
         return root;
-    }
-
-    private void request()
-    {
-
-            String textHelper = getResources().getString(R.string.week_number) + " " + String.valueOf(currDate.get(Calendar.WEEK_OF_YEAR));
-            SpannableString underlinedString = new SpannableString(textHelper);
-            underlinedString.setSpan(new UnderlineSpan(), 0, underlinedString.length(), 0);
-            ((TextView)root.findViewById(R.id.tvWeekNumber)).setText(underlinedString);
-
-            Query query = FirebaseDatabase.getInstance().getReference("cal").child(currDate.get(Calendar.YEAR) + "/" + currDate.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
-
-            FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
-
-            final CalendarMainAdapter adapter = new CalendarMainAdapter(options);
-
-            adapter.setClickListener(this);
-
-            RecyclerView recyclerView = root.findViewById(R.id.rvCal);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(adapter);
-
-
-            setListeners(adapter);
-
     }
 
     private void setEvents()
@@ -142,14 +96,15 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                         {
-                            for(DataSnapshot data : dataSnapshot.getChildren())
+                            for (DataSnapshot data : dataSnapshot.getChildren())
                             {
                                 Calendar calendar = Calendar.getInstance();
                                 long timestamp = data.child("dateStart").getValue(Long.class);
                                 calendar.setTimeInMillis(timestamp);
                                 events.add(new EventDay(calendar, R.drawable.ic_event_black_24dp));
                             }
-                            if(i.equals(weeks.get(weeks.size() - 1))) {
+                            if (i.equals(weeks.get(weeks.size() - 1)))
+                            {
                                 calendarView.setEvents(events);
                             }
                         }
@@ -171,34 +126,53 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
         });
     }
 
-    private void setListeners(final CalendarMainAdapter adapter)
+    private void setListeners()
     {
         calendarView.setOnDayClickListener(eventDay ->
         {
             Calendar cal = eventDay.getCalendar();
 
-            Query query = FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
-            FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainFragment.this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
-            adapter.updateOptions(options);
-            adapter.notifyDataSetChanged();
-            String textHelper = getResources().getString(R.string.week_number) + " " +  String.valueOf(cal.get(Calendar.WEEK_OF_YEAR));
+            String textHelper = getResources().getString(R.string.week_number) + " " + cal.get(Calendar.WEEK_OF_YEAR);
             SpannableString underlinedString = new SpannableString(textHelper);
             underlinedString.setSpan(new UnderlineSpan(), 0, underlinedString.length(), 0);
-            ((TextView)root.findViewById(R.id.tvWeekNumber)).setText(underlinedString);
+
+            View dialogView = getLayoutInflater().inflate(R.layout.popup_calendar_events, null);
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.dismiss());
+            builder.setView(dialogView);
+            builder.setTitle(underlinedString);
+
+
+
+            Query query = FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
+
+            FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
+
+            CalendarMainAdapter adapter = new CalendarMainAdapter(options);
+            adapter.setClickListener(this);
+
+            RecyclerView recyclerView = dialogView.findViewById(R.id.rvCal);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(adapter);
+
+
+
+
+            dialog = builder.create();
+            dialog.show();
+
+
         });
 
-        calendarView.setOnForwardPageChangeListener(() -> setNothingRV(adapter));
+        calendarView.setOnForwardPageChangeListener(this::setNothingRV);
 
-        calendarView.setOnPreviousPageChangeListener(() -> setNothingRV(adapter));
+        calendarView.setOnPreviousPageChangeListener(this::setNothingRV);
     }
 
-    private void setNothingRV(CalendarMainAdapter adapter)
+    private void setNothingRV()
     {
-        Query query1 = FirebaseDatabase.getInstance().getReference("1");
-        FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(CalendarMainFragment.this).setQuery(query1, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
-        adapter.updateOptions(options);
-        adapter.notifyDataSetChanged();
-        ((TextView)root.findViewById(R.id.tvWeekNumber)).setText("");
         currDate = calendarView.getCurrentPageDate();
         setEvents();
     }
@@ -233,11 +207,13 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
     {
         switch (requestCode)
         {
-            case 0: Intent intent = new Intent(getContext(), CalendarEditActivity.class);
+            case 0:
+                Intent intent = new Intent(getContext(), CalendarEditActivity.class);
                 intent.putExtra(CalendarEditActivity.CAL_EXTRA, model);
                 startActivity(intent);
                 break;
-            case 1:helperCal.setTimeInMillis(model.getDateStart());
+            case 1:
+                helperCal.setTimeInMillis(model.getDateStart());
                 FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(helperCal.get(java.util.Calendar.YEAR))).child(String.valueOf(helperCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(model.getId()).removeValue();
                 currDate.setTimeInMillis(model.getDateStart());
                 setEvents();

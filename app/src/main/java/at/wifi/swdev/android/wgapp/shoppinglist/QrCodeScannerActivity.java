@@ -133,57 +133,48 @@ public class QrCodeScannerActivity extends AppCompatActivity
     private void scanedItem(final SparseArray<Barcode> detectedItems, final Vibrator vibrator)
     {
         detectionEnabled = false;
-        binding.tvAgain.post(new Runnable()
+
+        binding.tvAgain.post(() -> binding.tvAgain.setVisibility(View.VISIBLE));
+
+        binding.tvInfo.post(() ->
         {
-            @Override
-            public void run()
-            {
-                binding.tvAgain.setVisibility(View.VISIBLE);
-            }
-        });
-        binding.tvInfo.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final Barcode barcode = detectedItems.valueAt(0);
-                vibrator.vibrate(200);
-                binding.tvInfo.setText(barcode.displayValue);
+            final Barcode barcode = detectedItems.valueAt(0);
+            vibrator.vibrate(200);
+            binding.tvInfo.setText(barcode.displayValue);
 
 
-                FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
+            FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(@NotNull DataSnapshot dataSnapshot)
                 {
-                    @Override
-                    public void onDataChange(@NotNull DataSnapshot dataSnapshot)
+                    if (dataSnapshot.exists())
                     {
-                        if (dataSnapshot.exists())
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren())
                         {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                            long qrId = (long) snapshot.child("qrId").getValue();
+                            String qrIdString = ""+qrId;
+                            if (qrIdString.equals(barcode.displayValue))
                             {
-                                long qrId = (long) snapshot.child("qrId").getValue();
-                                String qrIdString = ""+qrId;
-                                if (qrIdString.equals(barcode.displayValue))
+                                ArrayList<Artikel> qrArtikel = new ArrayList<>();
+                                for (DataSnapshot items : snapshot.child("items").getChildren())
                                 {
-                                    ArrayList<Artikel> qrArtikel = new ArrayList<>();
-                                    for (DataSnapshot items : snapshot.child("items").getChildren())
-                                    {
-                                        Artikel artikel = items.getValue(Artikel.class);
-                                        qrArtikel.add(artikel);
-                                    }
-                                    startActivityForResult(new Intent(context, QrCodeItemsActivity.class).putExtra(ARTIKEL_EXTRA, qrArtikel), REQUEST_CODE_QR_ITEMS);
+                                    Artikel artikel = items.getValue(Artikel.class);
+                                    qrArtikel.add(artikel);
                                 }
+                                startActivityForResult(new Intent(context, QrCodeItemsActivity.class).putExtra(ARTIKEL_EXTRA, qrArtikel), REQUEST_CODE_QR_ITEMS);
                             }
-                            binding.tvInfo.setText(R.string.thisQrIsNotInDatabase);
                         }
+                        binding.tvInfo.setText(R.string.thisQrIsNotInDatabase);
                     }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError)
-                    {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError)
+                {
 
-                    }
-                });
-            }
+                }
+            });
         });
     }
 

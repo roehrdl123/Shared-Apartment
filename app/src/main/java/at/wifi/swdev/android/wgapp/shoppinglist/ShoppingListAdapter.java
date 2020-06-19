@@ -37,52 +37,20 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
         holder.doneIV.setImageResource(model.isDone() ? R.drawable.ic_check_green_24dp: R.drawable.ic_check_box_outline_blank_black_24dp);
         if(!model.isDone())
         {
-            holder.doneIV.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    model.setDone(true);
-                    FirebaseDatabase.getInstance().getReference("shoppinglist").child(model.getId()).setValue(model);
-                }
+            holder.doneIV.setOnClickListener(v -> {
+                model.setDone(true);
+                FirebaseDatabase.getInstance().getReference("shoppinglist").child(model.getId()).setValue(model);
             });
         }
-//
-//        holder.infoIV.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//                listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
-//            }
-//        });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO);
-            }
-        });
-        holder.editIV.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_EDIT);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_INFO));
+        holder.editIV.setOnClickListener(v -> listItemClickListener.onListItemClick(model, ShowItemShoppingListActivity.REQUEST_CODE_EDIT));
 
 
-        holder.deleteIV.setOnClickListener(new View.OnClickListener()
+        holder.deleteIV.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(final View v)
-            {
-                FirebaseDatabase.getInstance().getReference("shoppinglist").child(model.getId()).removeValue();
-                Toast.makeText(context, "Artikel wurde gelöscht", Toast.LENGTH_SHORT).show();
-            }
+            FirebaseDatabase.getInstance().getReference("shoppinglist").child(model.getId()).removeValue();
+            Toast.makeText(context, "Artikel wurde gelöscht", Toast.LENGTH_SHORT).show();
         });
     }
 

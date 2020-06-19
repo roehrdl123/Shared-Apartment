@@ -35,26 +35,19 @@ public class QrCodeItemsAdapter extends RecyclerView.Adapter<QrCodeItemsAdapter.
     public void onBindViewHolder(@NonNull final QrItemViewHolder holder, final int position)
     {
         final Artikel currArtikel = artikel.get(position);
+
         holder.etQuantity.setText(currArtikel.getQuantity()+"");
+
         holder.tvTitle.setText(currArtikel.getTitle());
-        holder.btnChangeQuantitiy.setOnClickListener(new View.OnClickListener()
+
+        holder.btnChangeQuantitiy.setOnClickListener(view -> currArtikel.setQuantity(Integer.parseInt(holder.etQuantity.getText().toString())));
+
+        holder.ivDelete.setOnClickListener(view ->
         {
-            @Override
-            public void onClick(View view)
+            artikel.remove(position);
+            if(artikel.size() == 0)
             {
-                currArtikel.setQuantity(Integer.parseInt(holder.etQuantity.getText().toString()));
-            }
-        });
-        holder.ivDelete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                artikel.remove(position);
-                if(artikel.size() == 0)
-                {
-                    onListItemClickListener.onListItemClick(currArtikel, 0);
-                }
+                onListItemClickListener.onListItemClick(currArtikel, 0);
             }
         });
     }

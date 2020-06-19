@@ -33,14 +33,7 @@ public class QrCodeListEditAdapter extends FirebaseRecyclerAdapter<Artikel, QrCo
         holder.tvTitle.setText(String.valueOf(model.getTitle()));
         holder.tvContent.setText(String.valueOf(model.getContent()));
 
-        holder.ivDelete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                listener.onListItemClick(model, 0);
-            }
-        });
+        holder.ivDelete.setOnClickListener(view -> listener.onListItemClick(model, 0));
     }
 
     @NonNull

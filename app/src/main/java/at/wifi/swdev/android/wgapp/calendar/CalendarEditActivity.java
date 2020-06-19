@@ -58,7 +58,10 @@ public class CalendarEditActivity extends AppCompatActivity implements DatePicke
             binding.etEndTime.setText(formatTime.format(new Date(cal.getDateEnd())));
 
             binding.etTitleCal.setText(cal.getTitle());
-            binding.etContent.setText(cal.getContent());
+            if(cal.getContent() != null)
+            {
+                binding.etContent.setText(cal.getContent());
+            }
 
             datePickerDialog = new DatePickerDialog(this, this, startCal.get(java.util.Calendar.YEAR), startCal.get(java.util.Calendar.MONTH), startCal.get(java.util.Calendar.DAY_OF_MONTH));
             timePickerDialog = new TimePickerDialog(this, this, startCal.get(java.util.Calendar.HOUR_OF_DAY), startCal.get(java.util.Calendar.MINUTE), true);
@@ -120,41 +123,21 @@ public class CalendarEditActivity extends AppCompatActivity implements DatePicke
 
     private void setListeners()
     {
-        binding.etStartTime.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                timeClickStart = true;
-                timePickerDialog.show();
-            }
+        binding.etStartTime.setOnClickListener(view -> {
+            timeClickStart = true;
+            timePickerDialog.show();
         });
-        binding.etStartDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                dateClickStart = true;
-                datePickerDialog.show();
-            }
+        binding.etStartDate.setOnClickListener(view -> {
+            dateClickStart = true;
+            datePickerDialog.show();
         });
-        binding.etEndTime.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                timeClickStart = false;
-                timePickerDialog.show();
-            }
+        binding.etEndTime.setOnClickListener(view -> {
+            timeClickStart = false;
+            timePickerDialog.show();
         });
-        binding.etEndDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                dateClickStart = false;
-                datePickerDialog.show();
-            }
+        binding.etEndDate.setOnClickListener(view -> {
+            dateClickStart = false;
+            datePickerDialog.show();
         });
     }
 

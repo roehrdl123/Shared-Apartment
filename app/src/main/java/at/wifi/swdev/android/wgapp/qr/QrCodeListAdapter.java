@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -50,32 +49,11 @@ public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.Qr
         if(model.isOccupied())
         {
             holder.llActions.setVisibility(View.VISIBLE);
-            holder.itemView.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    onListItemClickListener.onListItemClick(model, QrCodeListEditActivity.RQ_CODE_EDIT);
-                }
-            });
+            holder.itemView.setOnClickListener(view -> onListItemClickListener.onListItemClick(model, QrCodeListEditActivity.RQ_CODE_EDIT));
 
-            holder.ivDelete.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    FirebaseDatabase.getInstance().getReference("qrcodes").child(model.getKey()).removeValue();
-                }
-            });
+            holder.ivDelete.setOnClickListener(view -> FirebaseDatabase.getInstance().getReference("qrcodes").child(model.getKey()).removeValue());
 
-            holder.ivEdit.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    onListItemClickListener.onListItemClick(model, QrCodeListEditActivity.RQ_CODE_EDIT);
-                }
-            });
+            holder.ivEdit.setOnClickListener(view -> onListItemClickListener.onListItemClick(model, QrCodeListEditActivity.RQ_CODE_EDIT));
         }
         else
         {
@@ -84,14 +62,10 @@ public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.Qr
         }
 
         final long ONE_MEGABYTE = 1024 * 1024;
-        FirebaseStorage.getInstance().getReference("qrs").child(model.getQrId() + ".png").getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>()
+        FirebaseStorage.getInstance().getReference("qrs").child(model.getQrId() + ".png").getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes ->
         {
-            @Override
-            public void onSuccess(byte[] bytes)
-            {
-                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                holder.ivQr.setImageBitmap(bitmap);
-            }
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            holder.ivQr.setImageBitmap(bitmap);
         });
     }
 

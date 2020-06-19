@@ -3,7 +3,6 @@ package at.wifi.swdev.android.wgapp.qr;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,8 +17,6 @@ import androidx.print.PrintHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
@@ -65,52 +61,44 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
 
         StorageReference listRef = FirebaseStorage.getInstance().getReference("qrs");
 
-        listRef.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>()
+        listRef.listAll().addOnSuccessListener(listResult -> FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
-            public void onSuccess(final ListResult listResult)
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
+                HashSet<Integer> setData = new HashSet<>();
+                HashSet<Integer> setPics = new HashSet<>();
+                Map<Integer, StorageReference> map = new HashMap<>();
+                for (DataSnapshot data : dataSnapshot.getChildren())
                 {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-                    {
-                        HashSet<Integer> setData = new HashSet<>();
-                        HashSet<Integer> setPics = new HashSet<>();
-                        Map<Integer, StorageReference> map = new HashMap<>();
-                        for (DataSnapshot data : dataSnapshot.getChildren())
-                        {
-                            QRItems qrItem = data.getValue(QRItems.class);
-                            setData.add(qrItem.getQrId());
-                        }
-                        for (StorageReference item : listResult.getItems())
-                        {
-                            int id = Integer.parseInt(item.getName().split("\\.")[0]);
-                            setPics.add(id);
-                            map.put(id, item);
-                        }
+                    QRItems qrItem = data.getValue(QRItems.class);
+                    setData.add(qrItem.getQrId());
+                }
+                for (StorageReference item : listResult.getItems())
+                {
+                    int id = Integer.parseInt(item.getName().split("\\.")[0]);
+                    setPics.add(id);
+                    map.put(id, item);
+                }
 
-                        setPics.removeAll(setData);
+                setPics.removeAll(setData);
 
-                        if (setPics.size() != 0)
-                        {
-                            int id = setPics.iterator().next();
-                            newQrCode(map.get(id));
-                        }
-                        else
-                        {
-                            Toast.makeText(QrCodeAddTableActivity.this, "Kein QR-Code verfügbar. Kontaktieren sie den Service :)", Toast.LENGTH_SHORT).show();
-                            onFinish();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError)
-                    {
-                    }
-                });
+                if (setPics.size() != 0)
+                {
+                    int id = setPics.iterator().next();
+                    newQrCode(map.get(id));
+                } else
+                {
+                    Toast.makeText(QrCodeAddTableActivity.this, "Kein QR-Code verfügbar. Kontaktieren sie den Service :)", Toast.LENGTH_SHORT).show();
+                    onFinish();
+                }
             }
-        });
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
+            }
+        }));
 
     }
 
@@ -127,21 +115,7 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
         qr.setOccupied(true);
         String helpi = item.getName().split("\\.")[0];
         qr.setQrId(Integer.parseInt(helpi));
-        item.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
-        {
-            @Override
-            public void onSuccess(Uri uri)
-            {
-                qr.setQrCodeURL(uri.getPath());
-            }
-        }).addOnFailureListener(new OnFailureListener()
-        {
-            @Override
-            public void onFailure(@NonNull Exception e)
-            {
-                qr.setQrCodeURL("error");
-            }
-        });
+        item.getDownloadUrl().addOnSuccessListener(uri -> qr.setQrCodeURL(uri.getPath())).addOnFailureListener(e -> qr.setQrCodeURL("error"));
 
         if (qr != null)
         {
@@ -248,21 +222,10 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
         final PrintHelper photoPrinter = new PrintHelper(this);
         photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
         final long ONE_MEGABYTE = 1024 * 1024;
-        FirebaseStorage.getInstance().getReference("qrs").child(qr.getQrId() + ".png").getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>()
-        {
-            @Override
-            public void onSuccess(byte[] bytes)
-            {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                photoPrinter.printBitmap("test-print", bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener()
-        {
-            @Override
-            public void onFailure(@NonNull Exception exception)
-            {
-                // Handle any errors
-            }
+        FirebaseStorage.getInstance().getReference("qrs").child(qr.getQrId() + ".png").getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            photoPrinter.printBitmap("test-print", bitmap);
+        }).addOnFailureListener(exception -> {
         });
     }
 
