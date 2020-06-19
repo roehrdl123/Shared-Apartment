@@ -77,7 +77,7 @@ public class CalendarEditActivity extends AppCompatActivity implements DatePicke
 
     public void onEdit(View view)
     {
-        if ((!(binding.etTitleCal.getText().toString().matches("") || binding.etContent.getText().toString().matches(""))) && allDates())
+        if (!binding.etTitleCal.getText().toString().matches("")  && allDates())
         {
             if (endCal.getTimeInMillis() >= startCal.getTimeInMillis())
             {
