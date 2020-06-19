@@ -107,8 +107,4 @@ public class MainActivity extends AppCompatActivity
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
-    /*
-    TODO: 3: maybe kalender swipe to delete? & Kalender Popup??
-    */
-
 }
