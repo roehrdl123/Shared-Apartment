@@ -224,7 +224,7 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
         final long ONE_MEGABYTE = 1024 * 1024;
         FirebaseStorage.getInstance().getReference("qrs").child(qr.getQrId() + ".png").getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            photoPrinter.printBitmap("test-print", bitmap);
+            photoPrinter.printBitmap(qr.getQrId()+"-print", bitmap);
         }).addOnFailureListener(exception -> {
         });
     }

@@ -48,7 +48,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         binding = ActivityQrCodeScannerBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+
         context = this;
         getSupportActionBar().setTitle(R.string.qrscanner);
 
@@ -56,6 +56,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
         {
             //Permission already granted
             startQRCodeDetection();
+            setContentView(binding.getRoot());
         } else
         {
             String[] permissions = {Manifest.permission.CAMERA};
@@ -153,7 +154,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
                         for (DataSnapshot snapshot : dataSnapshot.getChildren())
                         {
                             long qrId = (long) snapshot.child("qrId").getValue();
-                            String qrIdString = ""+qrId;
+                            String qrIdString = "" + qrId;
                             if (qrIdString.equals(barcode.displayValue))
                             {
                                 ArrayList<Artikel> qrArtikel = new ArrayList<>();
@@ -183,10 +184,11 @@ public class QrCodeScannerActivity extends AppCompatActivity
     {
         if (requestCode == CAMERA_REQUEST_CODE)
         {
+            setContentView(binding.getRoot());
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
                 //Permission granted
-                binding.svCameraView.invalidate();
+
                 startQRCodeDetection();
             } else
             {

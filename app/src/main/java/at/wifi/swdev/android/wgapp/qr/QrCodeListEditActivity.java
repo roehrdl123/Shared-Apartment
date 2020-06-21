@@ -162,7 +162,7 @@ public class QrCodeListEditActivity extends AppCompatActivity implements onListI
         FirebaseStorage.getInstance().getReference("qrs").child(qrItem.getQrId() + ".png").getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes ->
         {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            photoPrinter.printBitmap("test-print", bitmap);
+            photoPrinter.printBitmap(qrItem.getQrId()+"-print", bitmap);
         }).addOnFailureListener(exception -> {});
     }
 }

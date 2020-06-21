@@ -63,7 +63,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
 
         RecyclerView recyclerView = root.findViewById(R.id.rvShoppingList);
         root.findViewById(R.id.btnAddToShop).setOnClickListener(view -> addShoppingList());
-        Query shoppinglistQuery = FirebaseDatabase.getInstance().getReference("shoppinglist");
+        Query shoppinglistQuery = FirebaseDatabase.getInstance().getReference("shoppinglist").orderByChild("title");
 
         FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(this).setQuery(shoppinglistQuery, Artikel.class).build();
 
