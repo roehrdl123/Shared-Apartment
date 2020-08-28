@@ -66,7 +66,6 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
         private final ImageView doneIV;
         private final TextView amountTV;
         private final TextView titleTV;
-//        private final ImageView infoIV;
         private final ImageView editIV;
         private final ImageView deleteIV;
 
@@ -76,7 +75,6 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
             doneIV = itemView.findViewById(R.id.ivDoneToDo);
             amountTV = itemView.findViewById(R.id.tvAmount);
             titleTV = itemView.findViewById(R.id.tvTitleToDo);
-//            infoIV = itemView.findViewById(R.id.ivInfoQr);
             editIV = itemView.findViewById(R.id.ivEditQr);
             deleteIV = itemView.findViewById(R.id.ivDeleteQr);
         }

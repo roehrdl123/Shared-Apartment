@@ -58,9 +58,14 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
         binding.edit.setText(R.string.save);
         binding.tvHeadline.setText(R.string.edit);
         binding.swDone.setClickable(true);
-        binding.etAmount.setKeyListener((KeyListener) binding.etAmount.getTag());
-        binding.etTitle.setKeyListener((KeyListener) binding.etTitle.getTag());
-        binding.etContent.setKeyListener((KeyListener) binding.etContent.getTag());
+
+
+        if(binding.etContent.getTag() instanceof KeyListener)
+        {
+            binding.etTitle.setKeyListener((KeyListener) binding.etTitle.getTag());
+            binding.etContent.setKeyListener((KeyListener) binding.etContent.getTag());
+            binding.etAmount.setKeyListener((KeyListener) binding.etAmount.getTag());
+        }
     }
 
     private void showInfo()

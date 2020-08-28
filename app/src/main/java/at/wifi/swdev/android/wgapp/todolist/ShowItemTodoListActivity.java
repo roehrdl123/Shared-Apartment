@@ -42,7 +42,8 @@ public class ShowItemTodoListActivity extends AppCompatActivity
         {
             isEditing = true;
             showEdit();
-        } else if (requestCode == REQUEST_CODE_INFO)
+        }
+        else if (requestCode == REQUEST_CODE_INFO)
         {
             isEditing = false;
             showInfo();
@@ -54,8 +55,12 @@ public class ShowItemTodoListActivity extends AppCompatActivity
         binding.edit.setText(R.string.save);
         binding.tvHeadline.setText(R.string.edit);
         binding.swDone.setClickable(true);
-        binding.etTitle.setKeyListener((KeyListener) binding.etTitle.getTag());
-        binding.etContent.setKeyListener((KeyListener) binding.etContent.getTag());
+
+        if(binding.etContent.getTag() instanceof KeyListener)
+        {
+            binding.etTitle.setKeyListener((KeyListener) binding.etTitle.getTag());
+            binding.etContent.setKeyListener((KeyListener) binding.etContent.getTag());
+        }
     }
 
     private void showInfo()
@@ -86,7 +91,8 @@ public class ShowItemTodoListActivity extends AppCompatActivity
             isEditing = true;
             Toast.makeText(this, R.string.changeAllowed, Toast.LENGTH_SHORT).show();
             showEdit();
-        } else
+        }
+        else
         {
             if (binding.etTitle.getText() != null && binding.etContent.getText() != null)
             {
