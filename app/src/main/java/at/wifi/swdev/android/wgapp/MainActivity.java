@@ -107,4 +107,14 @@ public class MainActivity extends AppCompatActivity
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
+
+    public static String getStandardUser() throws Exception
+    {
+        String userId = FirebaseAuth.getInstance().getUid();
+        if(userId == null || userId.isEmpty())
+        {
+            throw new Exception("Achtung! Kein User vorhanden!");
+        }
+        return userId;
+    }
 }

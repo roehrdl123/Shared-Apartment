@@ -20,6 +20,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -87,7 +88,10 @@ public class QrCodeScannerActivity extends AppCompatActivity
                 //Kamera-Feed starten & anzeigen
                 try
                 {
-                    cameraSource.start(holder);
+                    if (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
+                    {
+                        cameraSource.start(holder);
+                    }
                 }
                 catch (IOException e)
                 {
@@ -144,7 +148,7 @@ public class QrCodeScannerActivity extends AppCompatActivity
             binding.tvInfo.setText(barcode.displayValue);
 
 
-            FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
+            FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
                 public void onDataChange(@NotNull DataSnapshot dataSnapshot)

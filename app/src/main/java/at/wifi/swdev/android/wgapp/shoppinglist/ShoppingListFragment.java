@@ -107,7 +107,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
     private void onAddTemplateShoppingList()
     {
 
-        FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").orderByChild("title").addListenerForSingleValueEvent(new ValueEventListener()
+        FirebaseDatabase.getInstance().getReference("templates").child(FirebaseAuth.getInstance().getUid()).child("shoppinglist").orderByChild("title").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -204,15 +204,15 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
 
     private void addToDatabase(Artikel artikel)
     {
-        String key = FirebaseDatabase.getInstance().getReference("shoppinglist").push().getKey();
+        String key = FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid()).push().getKey();
         artikel.setId(key);
-        FirebaseDatabase.getInstance().getReference("shoppinglist").child(key).setValue(artikel);
+        FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid()).child(key).setValue(artikel);
     }
 
     private void qrCodesInList(Intent data)
     {
         Map<String, Object> updates = new HashMap<>();
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("shoppinglist");
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid());
         ArrayList artikel = data.getParcelableArrayListExtra(QrCodeItemsActivity.QR_ARTIKEL_ID);
         for (Object art : artikel)
         {
@@ -283,7 +283,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
 
     private void removeAll()
     {
-        FirebaseDatabase.getInstance().getReference("shoppinglist").addListenerForSingleValueEvent(new ValueEventListener()
+        FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -299,7 +299,7 @@ public class ShoppingListFragment extends Fragment implements onListItemClickLis
 
                 for (String artKey : artikelKeys)
                 {
-                    FirebaseDatabase.getInstance().getReference("shoppinglist").child(artKey).removeValue();
+                    FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid()).child(artKey).removeValue();
                 }
                 Toast.makeText(getContext(), R.string.delete_all_art, Toast.LENGTH_SHORT).show();
             }

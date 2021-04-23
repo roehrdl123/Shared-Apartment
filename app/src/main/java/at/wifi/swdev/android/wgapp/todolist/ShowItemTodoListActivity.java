@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
@@ -100,7 +101,7 @@ public class ShowItemTodoListActivity extends AppCompatActivity
                 todo.setContent(binding.etContent.getText().toString());
                 todo.setDone(binding.swDone.isChecked());
 
-                FirebaseDatabase.getInstance().getReference("todos").child(todo.getId()).setValue(todo);
+                FirebaseDatabase.getInstance().getReference("todos").child(FirebaseAuth.getInstance().getUid()).child(todo.getId()).setValue(todo);
                 Toast.makeText(this, "Der Todo-Eintrag wurde geändert!", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -109,7 +110,7 @@ public class ShowItemTodoListActivity extends AppCompatActivity
 
     public void onDelete(View view)
     {
-        FirebaseDatabase.getInstance().getReference("todos").child(todo.getId()).removeValue();
+        FirebaseDatabase.getInstance().getReference("todos").child(FirebaseAuth.getInstance().getUid()).child(todo.getId()).removeValue();
         Toast.makeText(this, "Der Todo-Eintrag wurde gelöscht", Toast.LENGTH_SHORT).show();
         finish();
     }

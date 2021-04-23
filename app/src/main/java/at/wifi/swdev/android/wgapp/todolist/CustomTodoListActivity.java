@@ -6,6 +6,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.FirebaseExceptionMapper;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
@@ -41,7 +43,7 @@ public class CustomTodoListActivity extends AppCompatActivity
         {
             Todo todo = new Todo(binding.tvTitleTodo.getText().toString(), binding.tvContentTodo.getText().toString());
 
-            FirebaseDatabase.getInstance().getReference("templates").child("todos").push().setValue(todo);
+            FirebaseDatabase.getInstance().getReference("templates").child(FirebaseAuth.getInstance().getUid()).child("todos").push().setValue(todo);
 
             setResult(RESULT_OK, new Intent().putExtra(EXTRA_ID, todo));
             finish();

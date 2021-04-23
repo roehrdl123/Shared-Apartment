@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
@@ -71,9 +72,9 @@ public class CustomShoppingListActivity extends AppCompatActivity
                 }
                 setResult(RESULT_OK, new Intent().putExtra(ITEM_EXTRA, a));
 
-                String key = FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").push().getKey();
+                String key = FirebaseDatabase.getInstance().getReference("templates").child(FirebaseAuth.getInstance().getUid()).child("shoppinglist").push().getKey();
                 a.setId(key);
-                FirebaseDatabase.getInstance().getReference("templates").child("shoppinglist").child(key).setValue(a);
+                FirebaseDatabase.getInstance().getReference("templates").child(FirebaseAuth.getInstance().getUid()).child("shoppinglist").child(key).setValue(a);
 
                 finish();
             }

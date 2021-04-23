@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -77,7 +78,7 @@ public class CalendarAddActivity extends AppCompatActivity implements DatePicker
                 cal.setDateStart(start);
                 cal.setDateEnd(end);
 
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(startCal.get(Calendar.YEAR))).child(String.valueOf(startCal.get(Calendar.WEEK_OF_YEAR)));
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("cal").child(FirebaseAuth.getInstance().getUid()).child(String.valueOf(startCal.get(Calendar.YEAR))).child(String.valueOf(startCal.get(Calendar.WEEK_OF_YEAR)));
 
                 String key = ref.push().getKey();
 

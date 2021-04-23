@@ -54,7 +54,7 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
 
         RecyclerView recyclerView = root.findViewById(R.id.rvTodoList);
 
-        Query todoQuery = FirebaseDatabase.getInstance().getReference("todos");
+        Query todoQuery = FirebaseDatabase.getInstance().getReference("todos").child(FirebaseAuth.getInstance().getUid());
 
         FirebaseRecyclerOptions<Todo> options = new FirebaseRecyclerOptions.Builder<Todo>().setLifecycleOwner(this).setQuery(todoQuery, Todo.class).build();
 
@@ -91,7 +91,7 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
 
     private void onAddTemplateTodo()
     {
-        FirebaseDatabase.getInstance().getReference("templates").child("todos").orderByChild("title").addListenerForSingleValueEvent(new ValueEventListener()
+        FirebaseDatabase.getInstance().getReference("templates").child(FirebaseAuth.getInstance().getUid()).child("todos").orderByChild("title").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -153,9 +153,9 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
 
     private void addToDatabase(Todo todo)
     {
-        String key = FirebaseDatabase.getInstance().getReference("todos").push().getKey();
+        String key = FirebaseDatabase.getInstance().getReference("todos").child(FirebaseAuth.getInstance().getUid()).push().getKey();
         todo.setId(key);
-        FirebaseDatabase.getInstance().getReference("todos").child(key).setValue(todo);
+        FirebaseDatabase.getInstance().getReference("todos").child(FirebaseAuth.getInstance().getUid()).child(key).setValue(todo);
     }
 
     @Override
@@ -217,7 +217,7 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
 
     private void removeAll()
     {
-        FirebaseDatabase.getInstance().getReference("todos").addListenerForSingleValueEvent(new ValueEventListener()
+        FirebaseDatabase.getInstance().getReference("todos").child(FirebaseAuth.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -233,7 +233,7 @@ public class TodoListMainFragment extends Fragment implements onListItemClickLis
 
                 for (String artKey : artikelKeys)
                 {
-                    FirebaseDatabase.getInstance().getReference("todos").child(artKey).removeValue();
+                    FirebaseDatabase.getInstance().getReference("todos").child(FirebaseAuth.getInstance().getUid()).child(artKey).removeValue();
                 }
                 Toast.makeText(getContext(), R.string.delete_all_todo, Toast.LENGTH_SHORT).show();
             }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -51,7 +52,7 @@ public class QrCodeListAdapter extends RecyclerView.Adapter<QrCodeListAdapter.Qr
             holder.llActions.setVisibility(View.VISIBLE);
             holder.itemView.setOnClickListener(view -> onListItemClickListener.onListItemClick(model, QrCodeListEditActivity.RQ_CODE_EDIT));
 
-            holder.ivDelete.setOnClickListener(view -> FirebaseDatabase.getInstance().getReference("qrcodes").child(model.getKey()).removeValue());
+            holder.ivDelete.setOnClickListener(view -> FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(model.getKey()).removeValue());
 
             holder.ivEdit.setOnClickListener(view -> onListItemClickListener.onListItemClick(model, QrCodeListEditActivity.RQ_CODE_EDIT));
         }

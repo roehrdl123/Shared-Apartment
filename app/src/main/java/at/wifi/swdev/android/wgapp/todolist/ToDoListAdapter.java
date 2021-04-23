@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
@@ -50,7 +51,7 @@ public class ToDoListAdapter extends FirebaseRecyclerAdapter<Todo, ToDoListAdapt
 
         holder.deleteTodoTV.setOnClickListener(v ->
         {
-            FirebaseDatabase.getInstance().getReference("todos").child(model.getId()).removeValue();
+            FirebaseDatabase.getInstance().getReference("todos").child(FirebaseAuth.getInstance().getUid()).child(model.getId()).removeValue();
             Toast.makeText(context, "Der Todo-Eintrag wurde gelöscht", Toast.LENGTH_SHORT).show();
         });
     }

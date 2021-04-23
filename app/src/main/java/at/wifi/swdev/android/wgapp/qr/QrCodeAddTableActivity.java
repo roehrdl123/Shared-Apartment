@@ -17,6 +17,7 @@ import androidx.print.PrintHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import at.wifi.swdev.android.wgapp.MainActivity;
 import at.wifi.swdev.android.wgapp.R;
 import at.wifi.swdev.android.wgapp.data.Artikel;
 import at.wifi.swdev.android.wgapp.data.QRItems;
@@ -61,7 +63,7 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
 
         StorageReference listRef = FirebaseStorage.getInstance().getReference("qrs");
 
-        listRef.listAll().addOnSuccessListener(listResult -> FirebaseDatabase.getInstance().getReference("qrcodes").addListenerForSingleValueEvent(new ValueEventListener()
+        listRef.listAll().addOnSuccessListener(listResult -> FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -122,10 +124,10 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
             String string = getString(R.string.id) + qr.getQrId();
             binding.tvIdQrList.setText(string);
 
-            String key = FirebaseDatabase.getInstance().getReference("qrcodes").push().getKey();
+            String key = FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).push().getKey();
             qr.setKey(key);
-            FirebaseDatabase.getInstance().getReference("qrcodes").child(key).setValue(qr);
-            Query qrcodeQuery = FirebaseDatabase.getInstance().getReference("qrcodes").child(key).child("items");
+            FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(key).setValue(qr);
+            Query qrcodeQuery = FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(key).child("items");
 
             FirebaseRecyclerOptions<Artikel> options = new FirebaseRecyclerOptions.Builder<Artikel>().setLifecycleOwner(QrCodeAddTableActivity.this).setQuery(qrcodeQuery, Artikel.class).build();
 
@@ -157,9 +159,9 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
 
     private void addToDatabase(Artikel artikel)
     {
-        String key = FirebaseDatabase.getInstance().getReference("qrcodes").child(qr.getKey()).child("items").push().getKey();
+        String key = FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(qr.getKey()).child("items").push().getKey();
         artikel.setId(key);
-        FirebaseDatabase.getInstance().getReference("qrcodes").child(qr.getKey()).child("items").child(key).setValue(artikel);
+        FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(qr.getKey()).child("items").child(key).setValue(artikel);
     }
 
     @Override
@@ -177,7 +179,7 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
 
     public void onFinish(View view)
     {
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("qrcodes").child(qr.getKey());
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(qr.getKey());
         ref.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -232,6 +234,11 @@ public class QrCodeAddTableActivity extends AppCompatActivity implements onListI
     @Override
     public void onListItemClick(Artikel model, int requestCode)
     {
-        FirebaseDatabase.getInstance().getReference("qrcodes").child(qr.getKey()).child("items").child(model.getId()).removeValue();
+        try {
+            FirebaseDatabase.getInstance().getReference("qrcodes").child(MainActivity.getStandardUser()).child(qr.getKey()).child("items").child(model.getId()).removeValue();
+
+        } catch (Exception e) {
+            //TODO: Exception-Handling??
+        }
     }
 }

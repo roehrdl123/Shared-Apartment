@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
@@ -39,7 +40,7 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
         {
             holder.doneIV.setOnClickListener(v -> {
                 model.setDone(true);
-                FirebaseDatabase.getInstance().getReference("shoppinglist").child(model.getId()).setValue(model);
+                FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid()).child(model.getId()).setValue(model);
             });
         }
 
@@ -49,7 +50,7 @@ public class ShoppingListAdapter extends FirebaseRecyclerAdapter<Artikel, Shoppi
 
         holder.deleteIV.setOnClickListener(v ->
         {
-            FirebaseDatabase.getInstance().getReference("shoppinglist").child(model.getId()).removeValue();
+            FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid()).child(model.getId()).removeValue();
             Toast.makeText(context, "Artikel wurde gelöscht", Toast.LENGTH_SHORT).show();
         });
     }

@@ -16,6 +16,7 @@ import androidx.print.PrintHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -94,9 +95,9 @@ public class QrCodeListEditActivity extends AppCompatActivity implements onListI
 
     private void addToDatabase(Artikel artikel)
     {
-        String key = FirebaseDatabase.getInstance().getReference("qrcodes").child(qrItem.getKey()).child("items").push().getKey();
+        String key = FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(qrItem.getKey()).child("items").push().getKey();
         artikel.setId(key);
-        FirebaseDatabase.getInstance().getReference("qrcodes").child(qrItem.getKey()).child("items").child(key).setValue(artikel);
+        FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(qrItem.getKey()).child("items").child(key).setValue(artikel);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class QrCodeListEditActivity extends AppCompatActivity implements onListI
 
     public void onFertig(View view)
     {
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("qrcodes").child(qrItem.getKey());
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("qrcodes").child(FirebaseAuth.getInstance().getUid()).child(qrItem.getKey());
         ref.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override

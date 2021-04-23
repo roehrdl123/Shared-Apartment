@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.wifi.swdev.android.wgapp.R;
@@ -111,7 +112,7 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
                     artikel.setContent(binding.etContent.getText().toString());
                     artikel.setDone(binding.swDone.isChecked());
 
-                    FirebaseDatabase.getInstance().getReference("shoppinglist").child(artikel.getId()).setValue(artikel);
+                    FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid()).child(artikel.getId()).setValue(artikel);
                     Toast.makeText(this, R.string.article_edited, Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -125,7 +126,7 @@ public class ShowItemShoppingListActivity extends AppCompatActivity
 
     public void onDelete(View view)
     {
-        FirebaseDatabase.getInstance().getReference("shoppinglist").child(artikel.getId()).removeValue();
+        FirebaseDatabase.getInstance().getReference("shoppinglist").child(FirebaseAuth.getInstance().getUid()).child(artikel.getId()).removeValue();
         Toast.makeText(this, "Artikel wurde gelöscht", Toast.LENGTH_SHORT).show();
         finish();
     }

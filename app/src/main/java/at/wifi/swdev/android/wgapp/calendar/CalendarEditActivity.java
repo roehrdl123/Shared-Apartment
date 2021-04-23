@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
@@ -92,7 +93,7 @@ public class CalendarEditActivity extends AppCompatActivity implements DatePicke
                 cal.setDateStart(start);
                 cal.setDateEnd(end);
 
-                FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(startCal.get(java.util.Calendar.YEAR))).child(String.valueOf(startCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(cal.getId()).setValue(cal);
+                FirebaseDatabase.getInstance().getReference("cal").child(FirebaseAuth.getInstance().getUid()).child(String.valueOf(startCal.get(java.util.Calendar.YEAR))).child(String.valueOf(startCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(cal.getId()).setValue(cal);
 
                 finish();
             } else
@@ -178,7 +179,7 @@ public class CalendarEditActivity extends AppCompatActivity implements DatePicke
 
     public void onDelete(View view)
     {
-        FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(startCal.get(java.util.Calendar.YEAR))).child(String.valueOf(startCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(cal.getId()).removeValue();
+        FirebaseDatabase.getInstance().getReference("cal").child(FirebaseAuth.getInstance().getUid()).child(String.valueOf(startCal.get(java.util.Calendar.YEAR))).child(String.valueOf(startCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(cal.getId()).removeValue();
         Toast.makeText(this, R.string.remove_cal, Toast.LENGTH_SHORT).show();
         finish();
     }

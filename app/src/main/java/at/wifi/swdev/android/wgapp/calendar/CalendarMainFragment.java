@@ -73,7 +73,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
     private void setEvents()
     {
         List<EventDay> events = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference("cal").child(currDate.get(Calendar.YEAR) + "").addListenerForSingleValueEvent(new ValueEventListener()
+        FirebaseDatabase.getInstance().getReference("cal").child(FirebaseAuth.getInstance().getUid()).child(currDate.get(Calendar.YEAR) + "").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -91,7 +91,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
 
                 for (Integer i : weeks)
                 {
-                    FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + i).orderByChild("dateStart").addListenerForSingleValueEvent(new ValueEventListener()
+                    FirebaseDatabase.getInstance().getReference("cal").child(FirebaseAuth.getInstance().getUid()).child(cal.get(Calendar.YEAR) + "/" + i).orderByChild("dateStart").addListenerForSingleValueEvent(new ValueEventListener()
                     {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -146,7 +146,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
 
 
 
-            Query query = FirebaseDatabase.getInstance().getReference("cal").child(cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
+            Query query = FirebaseDatabase.getInstance().getReference("cal").child(FirebaseAuth.getInstance().getUid()).child(cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.WEEK_OF_YEAR)).orderByChild("dateStart");
 
             FirebaseRecyclerOptions<at.wifi.swdev.android.wgapp.data.Calendar> options = new FirebaseRecyclerOptions.Builder<at.wifi.swdev.android.wgapp.data.Calendar>().setLifecycleOwner(this).setQuery(query, at.wifi.swdev.android.wgapp.data.Calendar.class).build();
 
@@ -157,13 +157,8 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(adapter);
 
-
-
-
             dialog = builder.create();
             dialog.show();
-
-
         });
 
         calendarView.setOnForwardPageChangeListener(this::setNothingRV);
@@ -214,7 +209,7 @@ public class CalendarMainFragment extends Fragment implements onListItemClickLis
                 break;
             case 1:
                 helperCal.setTimeInMillis(model.getDateStart());
-                FirebaseDatabase.getInstance().getReference("cal").child(String.valueOf(helperCal.get(java.util.Calendar.YEAR))).child(String.valueOf(helperCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(model.getId()).removeValue();
+                FirebaseDatabase.getInstance().getReference("cal").child(FirebaseAuth.getInstance().getUid()).child(String.valueOf(helperCal.get(java.util.Calendar.YEAR))).child(String.valueOf(helperCal.get(java.util.Calendar.WEEK_OF_YEAR))).child(model.getId()).removeValue();
                 currDate.setTimeInMillis(model.getDateStart());
                 setEvents();
                 Toast.makeText(getContext(), R.string.remove_cal, Toast.LENGTH_SHORT).show();

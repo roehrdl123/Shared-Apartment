@@ -25,7 +25,7 @@ public class QrCodeItemsActivity extends AppCompatActivity implements onListItem
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        at.wifi.swdev.android.wgapp.databinding.ActivityQrCodeItemsBinding binding = ActivityQrCodeItemsBinding.inflate(getLayoutInflater());
+        ActivityQrCodeItemsBinding binding = ActivityQrCodeItemsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getSupportActionBar().setTitle(R.string.qrscanner);
 
